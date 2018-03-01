@@ -4,6 +4,7 @@
     "start": "nodemon app.js"
   },
   "dependencies": {
+    "cookie-parser": "^1.4.3",
     "express": "*",
     "jade": "*",
     "morgan": "^1.9.0",

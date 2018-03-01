@@ -13,6 +13,14 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon_.ico')))
 // app.use('/favicon.ico', express.static('images/favicon.ico'));
 
 
+var cookieParser = require('cookie-parser')
+app.use(cookieParser())
+
+app.use(function(req, res, next) {
+  console.log('Cookies: ', req.cookies)
+  next();
+})
+
 
 var logger = require('morgan');
 app.use(logger('dev'));
