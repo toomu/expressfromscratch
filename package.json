@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "express": "*",
-    "jade": "*"
+    "jade": "*",
+    "serve-favicon": "^2.4.5"
   }
 }

@@ -5,7 +5,12 @@ var http = require('http');
 
 var path = require('path');
 
+
 var app = express();
+var favicon = require('serve-favicon');
+
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
+// app.use('/favicon.ico', express.static('images/favicon.ico'));
 
 var port = 3000
 app.set('port', port);
@@ -13,6 +18,7 @@ app.set('port', port);
 var server = http.createServer(app);
 
 server.listen(port);
+
 
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -85,3 +91,7 @@ app.use(function(err, req,res, next){ //errrenderfucntion
 
 
 //creator router, router2 , errfunction, errrenderfunction
+
+
+
+
