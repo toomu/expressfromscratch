@@ -12,6 +12,13 @@ var favicon = require('serve-favicon');
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 // app.use('/favicon.ico', express.static('images/favicon.ico'));
 
+
+
+var logger = require('morgan');
+app.use(logger('dev'));
+
+
+
 var port = 3000
 app.set('port', port);
 
