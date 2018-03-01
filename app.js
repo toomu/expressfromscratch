@@ -18,7 +18,11 @@ server.listen(port);
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-
+app.use(function(req, res, next) {
+  // console.log(next.toString());
+  res.locals.creator = "kamal"
+  next();
+});
 
 
 var router = express.Router();
@@ -39,19 +43,12 @@ router2.get('/url2', function(req, res, next) {
 
 
   console.log("someone accessing url2");
-  res.render("x", {t:1});
+  res.json({"request":"url2"});
 
 });
 
 
 app.use(router)
-
-app.use(function(req, res, next) {
-  // console.log(next.toString());
-  res.locals.creator = "kamal"
-  next();
-});
-
 app.use(router2)
 
 
@@ -87,4 +84,4 @@ app.use(function(err, req,res, next){ //errrenderfucntion
 
 
 
-// router, creator, router2 , errfunction, errrenderfunction
+//creator router, router2 , errfunction, errrenderfunction
