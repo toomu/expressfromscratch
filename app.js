@@ -9,7 +9,7 @@ var path = require('path');
 var app = express();
 var favicon = require('serve-favicon');
 
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
+app.use(favicon(path.join(__dirname, 'public', 'favicon_.ico')))
 // app.use('/favicon.ico', express.static('images/favicon.ico'));
 
 
@@ -52,16 +52,22 @@ router.get('/', function(req, res, next) {
 
 
 
-router2.get('/url2', function(req, res, next) {
+router2.post('/url2', function(req, res, next) {
 
 
-  console.log("someone accessing url2");
+  console.log(req.body);
   res.json({"request":"url2"});
 
 });
 
 
 app.use(router)
+
+
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(router2)
 
 
@@ -97,7 +103,7 @@ app.use(function(err, req,res, next){ //errrenderfucntion
 
 
 
-//creator router, router2 , errfunction, errrenderfunction
+//morgan, bodyparser, creator router, router2 , errfunction, errrenderfunction
 
 
 
