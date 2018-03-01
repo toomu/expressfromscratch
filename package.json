@@ -1,0 +1,6 @@
+{
+  "name": "expressscrath",
+  "dependencies": {
+    "express": "*"
+  }
+}
