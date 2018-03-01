@@ -32,7 +32,7 @@ router.get('/', function(req, res, next) {
 
 
 
-router.get('/url2', function(req, res, next) {
+router2.get('/url2', function(req, res, next) {
 
 
   console.log("someone accessing url2");
