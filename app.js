@@ -65,9 +65,7 @@ app.use(function(err, req,res, next){ //errrenderfucntion
 
   if(err){
 
-    res.json({
-      err:err.status
-    })
+    res.render("error")
   }
 
 })
