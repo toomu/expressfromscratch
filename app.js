@@ -25,8 +25,11 @@ var router2 = express.Router();
 router.get('/', function(req, res, next) {
 
 
-  console.log("someone accessing website");
-  res.json({"request":"success"});
+  // console.log(req);
+  var err = new Error('wtf');
+
+  next(err);
+  //res.json({"request":"success"});
 
 });
 
