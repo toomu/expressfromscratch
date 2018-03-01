@@ -16,3 +16,17 @@ server.listen(port);
 
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+var router = express.Router();
+
+router.get('/', function(req, res, next) {
+
+
+  console.log("someone accessing website");
+  res.json({"request":"success"});
+
+});
+
+
+app.use(router)
