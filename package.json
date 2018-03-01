@@ -4,6 +4,7 @@
     "start": "nodemon app.js"
   },
   "dependencies": {
-    "express": "*"
+    "express": "*",
+    "jade": "*"
   }
 }

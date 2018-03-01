@@ -25,11 +25,8 @@ var router2 = express.Router();
 router.get('/', function(req, res, next) {
 
 
-  // console.log(req);
-  var err = new Error('wtf');
-
-  next(err);
-  //res.json({"request":"success"});
+  console.log("someone accessing website");
+  res.render("x");
 
 });
 
@@ -46,3 +43,9 @@ router2.get('/url2', function(req, res, next) {
 
 app.use(router)
 app.use(router2)
+
+
+app.set('views', path.join(__dirname, 'views'));
+
+app.set('view engine', 'jade');
+
