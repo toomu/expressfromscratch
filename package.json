@@ -1,5 +1,8 @@
 {
   "name": "expressscrath",
+  "scripts":{
+    "start":"nodemon app.js"
+  },
   "dependencies": {
     "express": "*"
   }
