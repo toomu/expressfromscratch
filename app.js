@@ -65,7 +65,7 @@ app.use(function(err, req,res, next){ //errrenderfucntion
 
   if(err){
 
-    res.render("error")
+    res.render("error", {err:err})
   }
 
 })
