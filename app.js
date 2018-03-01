@@ -49,3 +49,29 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.set('view engine', 'jade');
 
+
+
+app.use(function(req,res,next){ //errfunction
+
+
+  var err = new Error("Not found");
+  err.status =404;
+  next(err);
+
+});
+
+
+app.use(function(err, req,res, next){ //errrenderfucntion
+
+  if(err){
+
+    res.json({
+      err:err.status
+    })
+  }
+
+})
+
+
+
+//router, router2 , errfunction, errrenderfunction
