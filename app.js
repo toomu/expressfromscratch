@@ -20,6 +20,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var router = express.Router();
 
+var router2 = express.Router();
+
 router.get('/', function(req, res, next) {
 
 
@@ -29,4 +31,15 @@ router.get('/', function(req, res, next) {
 });
 
 
+
+router.get('/url2', function(req, res, next) {
+
+
+  console.log("someone accessing url2");
+  res.json({"request":"url2"});
+
+});
+
+
 app.use(router)
+app.use(router2)
