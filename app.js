@@ -9,8 +9,13 @@ var path = require('path');
 var app = express();
 var favicon = require('serve-favicon');
 
-app.use(favicon(path.join(__dirname, 'public', 'favicon_.ico')))
+app.use(favicon(path.join(__dirname, 'public', 'favicon_.ico')));
 // app.use('/favicon.ico', express.static('images/favicon.ico'));
+
+
+
+
+
 
 
 var cookieParser = require('cookie-parser')
@@ -27,7 +32,7 @@ app.use(logger('dev'));
 
 
 
-var port = 3000
+var port = process.argv[3] || 3000
 app.set('port', port);
 
 var server = http.createServer(app);
@@ -110,6 +115,11 @@ app.use(function(err, req,res, next){ //errrenderfucntion
 })
 
 
+// console.log(process)
+// process.exit();
+
+
+console.log(process.argv[3])
 
 //morgan, bodyparser, creator router, router2 , errfunction, errrenderfunction
 
