@@ -79,7 +79,7 @@ router.get('/', function(req, res, next) {
 
 router2.post('/createres', function(req, res, next) {
 
-  console.log(req.body);
+  // console.log(req.body);
 
   var res1 = new Restaurant({
     name: req.body.name
@@ -114,19 +114,44 @@ router2.get('/listrestaurants', function(req, res, next) {
 
 });
 
-router2.get('/deleterestaurant', function(req, res, next) {
+router2.post('/deleterestaurant/:id', function(req, res, next) {
 
-  Restaurant.find({}, function(err, restaurants) {
 
-    if(err){
+  console.log(req.params);
+
+  Restaurant.remove({ _id: req.params.id}, function(err) {
+    if (err) {
       res.json({err:err});
-    }else{
-      res.json({restaurants: restaurants});
+    }
+    else {
+      res.json({
+        status:"success"
+      })
     }
   });
 
 
 });
+
+router2.post('/updaterestaurant/:id', function(req, res, next) {
+
+
+  console.log(req.params);
+
+  Restaurant.update({ _id: req.params.id}, function(err) {
+    if (err) {
+      res.json({err:err});
+    }
+    else {
+      res.json({
+        status:"success"
+      })
+    }
+  });
+
+
+});
+
 
 
 app.use(router)
