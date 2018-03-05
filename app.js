@@ -13,7 +13,7 @@ var cookieParser = require('cookie-parser')
 app.use(cookieParser())
 
 app.use(function(req, res, next) {
-  console.log('Cookies: ', req.cookies)
+  console.log('Cookies: ', req.cookies);
   next();
 })
 
@@ -27,7 +27,7 @@ mongoose.connection.on("error", function(err){
   console.log(err);
   process.exit();
 
-})
+});
 
 
 var restaurantSchema = new mongoose.Schema({
@@ -37,7 +37,7 @@ var restaurantSchema = new mongoose.Schema({
   address:String,
   // menu : [],
   // images : []
-})
+});
 
 
 var Restaurant = mongoose.model("Restaurant" , restaurantSchema);
@@ -97,6 +97,33 @@ router2.post('/createres', function(req, res, next) {
 
   });
 
+});
+
+
+router2.get('/listrestaurants', function(req, res, next) {
+
+  Restaurant.find({}, function(err, restaurants) {
+
+    if(err){
+      res.json({err:err});
+    }else{
+      res.json({restaurants: restaurants});
+    }
+  });
+
+
+});
+
+router2.get('/deleterestaurant', function(req, res, next) {
+
+  Restaurant.find({}, function(err, restaurants) {
+
+    if(err){
+      res.json({err:err});
+    }else{
+      res.json({restaurants: restaurants});
+    }
+  });
 
 
 });
@@ -137,7 +164,7 @@ app.use(function(err, req,res, next){ //errrenderfucntion
 
     console.log(err);
 
-    res.render("error", {err:err, common:"common"})
+    res.render("error", {err:err, common:"common"});
   }
 
 })
