@@ -69,7 +69,7 @@ var router2 = express.Router();
 
 
 
-router2.post('/createres', function(req, res, next) {
+router2.post('/restaurants', function(req, res, next) {
 
   // console.log(req.body);
 
@@ -91,7 +91,7 @@ router2.post('/createres', function(req, res, next) {
 
 });
 
-router2.get('/listrestaurants', function(req, res, next) {
+router2.get('/restaurants', function(req, res, next) {
 
   Restaurant.find({}, function(err, restaurants) {
 
@@ -105,21 +105,20 @@ router2.get('/listrestaurants', function(req, res, next) {
 
 });
 
-router2.get('/listrestaurant/:id', function(req, res, next) {
+router2.get('/restaurants/:id', function(req, res, next) {
 
-  Restaurant.findOne({id:req.params.id}, function(err, restaurant) {
-
+  Restaurant.findById(req.params.id, function(err, restaurant) {
     if(err){
       res.json({err:err});
     }else{
-      res.json({restaurant: restaurant});
+      res.json(restaurant);
     }
   });
 
 
 });
 
-router2.post('/deleterestaurant/:id', function(req, res, next) {
+router2.delete('/restaurants/:id', function(req, res, next) {
 
 
   console.log(req.params);
@@ -138,7 +137,7 @@ router2.post('/deleterestaurant/:id', function(req, res, next) {
 
 });
 
-router2.post('/updaterestaurant/:id', function(req, res, next) {
+router2.patch('/restaurants/:id', function(req, res, next) {
 
 
   console.log(req.params);
