@@ -1,22 +1,13 @@
 var express = require("express");
-
 var http = require('http');
-
-
 var path = require('path');
-
+var mongoose = require("mongoose");
 
 var app = express();
 var favicon = require('serve-favicon');
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon_.ico')));
 // app.use('/favicon.ico', express.static('images/favicon.ico'));
-
-
-
-
-
-
 
 var cookieParser = require('cookie-parser')
 app.use(cookieParser())
@@ -30,9 +21,16 @@ app.use(function(req, res, next) {
 var logger = require('morgan');
 app.use(logger('dev'));
 
+mongoose.connect("mongodb://localhost:27017/test");
+
+mongoose.connection.on("error", function(err){
+  console.log(err);
+  process.exit();
+
+})
 
 
-var port = process.argv[3] || 3000
+var port = 3000
 app.set('port', port);
 
 var server = http.createServer(app);
@@ -118,11 +116,27 @@ app.use(function(err, req,res, next){ //errrenderfucntion
 // console.log(process)
 // process.exit();
 
-
-console.log(process.argv[3])
-
 //morgan, bodyparser, creator router, router2 , errfunction, errrenderfunction
 
 
+
+var restaurantSchema = new mongoose.Schema({
+  name: String,
+  description: String,
+  phone: String,
+  address:String,
+  // menu : [],
+  // images : []
+})
+
+
+var Restaurant = mongoose.model("Restaurant" , restaurantSchema);
+
+var res1 = new Restaurant({
+
+})
+
+
+res1.save();
 
 
