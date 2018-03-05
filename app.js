@@ -30,6 +30,20 @@ mongoose.connection.on("error", function(err){
 })
 
 
+var restaurantSchema = new mongoose.Schema({
+  name: {type:String, required:true},
+  description: {type:String, default:"wtf"},
+  phone: String,
+  address:String,
+  // menu : [],
+  // images : []
+})
+
+
+var Restaurant = mongoose.model("Restaurant" , restaurantSchema);
+
+
+
 var port = 3000
 app.set('port', port);
 
@@ -63,11 +77,27 @@ router.get('/', function(req, res, next) {
 
 
 
-router2.post('/url2', function(req, res, next) {
-
+router2.post('/createres', function(req, res, next) {
 
   console.log(req.body);
-  res.json({"request":"url2"});
+
+  var res1 = new Restaurant({
+    name: req.body.name
+  })
+
+
+  res1.save(function(err){
+    if(err){
+      console.log(err);
+      res.json({"status":err})
+    }else{
+      res.json({"status":"success"});
+    }
+
+
+  });
+
+
 
 });
 
@@ -120,25 +150,6 @@ app.use(function(err, req,res, next){ //errrenderfucntion
 
 
 
-var restaurantSchema = new mongoose.Schema({
-  _id: String,
-  name: {type:String, required:true},
-  description: {type:String, default:"wtf"},
-  phone: String,
-  address:String,
-  // menu : [],
-  // images : []
-})
 
-
-var Restaurant = mongoose.model("Restaurant" , restaurantSchema);
-
-var res1 = new Restaurant({
-  name: "res1824vwrvrw709",
-  _id: Math.random().toString()
-})
-
-
-res1.save();
 
 
