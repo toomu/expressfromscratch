@@ -67,14 +67,6 @@ var router = express.Router();
 
 var router2 = express.Router();
 
-router.get('/', function(req, res, next) {
-
-
-  console.log("someone accessing website");
-  res.render("x", {t:1});
-
-});
-
 
 
 router2.post('/createres', function(req, res, next) {
@@ -99,7 +91,6 @@ router2.post('/createres', function(req, res, next) {
 
 });
 
-
 router2.get('/listrestaurants', function(req, res, next) {
 
   Restaurant.find({}, function(err, restaurants) {
@@ -108,6 +99,20 @@ router2.get('/listrestaurants', function(req, res, next) {
       res.json({err:err});
     }else{
       res.json({restaurants: restaurants});
+    }
+  });
+
+
+});
+
+router2.get('/listrestaurant/:id', function(req, res, next) {
+
+  Restaurant.findOne({id:req.params.id}, function(err, restaurant) {
+
+    if(err){
+      res.json({err:err});
+    }else{
+      res.json({restaurant: restaurant});
     }
   });
 
