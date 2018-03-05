@@ -4,6 +4,23 @@ var path = require('path');
 var mongoose = require("mongoose");
 
 var app = express();
+
+var session = require("express-session");
+const MongoStore = require('connect-mongo')(session);
+
+app.use(session({
+  resave: true,
+  saveUninitialized: true,
+  secret: "supersecret",
+  store: new MongoStore({
+    url: "mongodb://localhost:27017/test",
+    autoReconnect: true,
+    clear_interval: 3600
+  })
+}));
+
+
+
 var favicon = require('serve-favicon');
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon_.ico')));
