@@ -138,17 +138,13 @@ router2.post('/updaterestaurant/:id', function(req, res, next) {
 
   console.log(req.params);
 
-  Restaurant.update({ _id: req.params.id}, function(err) {
-    if (err) {
-      res.json({err:err});
-    }
-    else {
-      res.json({
-        status:"success"
-      })
+  Restaurant.findByIdAndUpdate(req.params.id, { $set: { name: req.body.name }},{new:true}, function (err, restaurant) {
+    if (err){
+      res.json({err:err})
+    }else{
+      res.json({restaurant:restaurant});
     }
   });
-
 
 });
 
