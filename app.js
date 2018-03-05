@@ -121,8 +121,9 @@ app.use(function(err, req,res, next){ //errrenderfucntion
 
 
 var restaurantSchema = new mongoose.Schema({
-  name: String,
-  description: String,
+  _id: String,
+  name: {type:String, required:true},
+  description: {type:String, default:"wtf"},
   phone: String,
   address:String,
   // menu : [],
@@ -133,7 +134,8 @@ var restaurantSchema = new mongoose.Schema({
 var Restaurant = mongoose.model("Restaurant" , restaurantSchema);
 
 var res1 = new Restaurant({
-
+  name: "res1824vwrvrw709",
+  _id: Math.random().toString()
 })
 
 
