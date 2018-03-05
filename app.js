@@ -175,6 +175,9 @@ router2.post('/upload', upload.single('myFile'), function(req,res,next){
   res.json({status:"success"});
 });
 
+router2.get('/download/:file', function(req,res,next){
+  res.sendFile(__dirname + "/uploads/" + req.params.file);
+});
 
 
 
