@@ -1,139 +1,103 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <title>Restrarant Form</title>
+
+    <meta charset="utf-8">
+
+    <title>Signup form</title>
     <style>
+        html{
+            background-color: #f3f3f3;
+        }
 
-        .heading {
+        .form-mini-container{
+            max-width: 315px;
+            margin: 0 auto;
+            font: normal 14px sans-serif;
             text-align: center;
-            margin-bottom: 25px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-weight: 500;
-            font-size: 20px;
-            margin-top: 20px;
+            color: #5f5f5f;
         }
-        .container {
-            width: 43%;
-            margin: auto;
-            padding: 30px 30px 20px;
+
+        .form-mini{
             box-sizing: border-box;
-            background-color: rgba(0, 0, 0, 0.5);
+            padding: 40px;
+
+            background-color:  #ffffff;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
         }
 
-        label.form-label {
-            display: inline-block;
-            width: 27%;
-            font-weight: 400;
-            letter-spacing: 1px;
-            vertical-align: top;
+        .form-mini .form-row{
+            display: block;
+            text-align: left;
+            margin-bottom: 23px;
         }
-        .form-input {
-            display: inline-block;
-            width: 72%;
-        }
-        ul.field-list li {
-            margin: 15px 0px;
-        }
-        input[type="text"],input[type="email"] {
-            /*margin: 15px 0px;*/
-            padding: 12px 10px;
+
+        .form-mini input,
+        .form-mini select{
             box-sizing: border-box;
-            background-color: #fff;
-            font-size: 15px;
-            border: none;
-            width: 98.6%;
-            color: #333;
-            font-family: 'Alegreya Sans', sans-serif;
-        }
-        span.form-sub-label input[type="text"] {
-            margin: 0px 0px 15px 0;
-            width: 49%;
+            width: 240px;
+            box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.08);
+            padding: 12px 18px;
+            border: 1px solid #dbdbdb;
         }
 
-
-        .submit_btn{
-            text-align: right;
-            margin-right: 10px;
-        }
-        input[type="submit"] {
-            width: 72.5%;
-            padding: 10px 40px;
-            margin-top: 5px;
-            font-size: 16px;
-            background-color: #007cc0;
-            border: 1px solid #007cc0;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            outline: 0;
+        .form-mini button{
+            display: block;
+            border-radius: 2px;
+            background-color:  #6caee0;
+            color: #ffffff;
+            font-weight: bold;
+            box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.08);
+            width: 100%;
+            padding: 14px 22px;
+            border: 0;
             cursor: pointer;
-            font-family: 'Alegreya Sans', sans-serif;
         }
-
     </style>
 </head>
 <body>
-<div class="heading">
-    <h1>Restrarant Form</h1>
-</div>
-<div class="container">
-    <form action="#" method="post">
-        <ul class="field-list">
-            <li class="name">
-                <label class="form-label"> Restrarant Name <span class="form-required"> * </span></label>
-                <div class="form-input add">
-								<span class="form-sub-label">
-									<input type="text" name="Restrarant" placeholder="Restrarant Name" required>
-								</span>
-                </div>
-            </li>
+<div class="main-content">
 
-            <li>
-                <label class="form-label"> Phone Number <span class="form-required"> * </span></label>
-                <div class="form-input">
-                    <input type="text" name="mobile_number" placeholder="Phone Number" required >
-                </div>
-            </li>
-            <li>
-                <label class="form-label"> Gender <span class="form-required"> * </span></label>
-                <div class="form-input">
-                    <input type="text" select name="gender" placeholder="gender" required>
-                </div>
-            </li>
+    <div class="form-mini-container">
 
-            <li>
-                <label class="form-label">Address<span class="form-required"> * </span>
-                </label>
-                <div class="form-input add">
-								<span class="form-sub-label">
-									<input type="text" name="street_address" placeholder="Street Address " required>
-								</span>
-                    <span class="form-sub-label">
-									<input type="text" name="street_address2" placeholder="Street Line 2 " required>
-								</span>
-                    <span class="form-sub-label">
-									<input type="text" name="landmark" placeholder="Landmark " required>
-								</span>
-                    <span class="form-sub-label">
-									<input type="text" name="City" placeholder="City" required>
-								</span>
-                    <span class="form-sub-label last">
-									<input type="text" name="state" placeholder="State / Province " required>
-								</span>
-                    <span class="form-sub-label last">
-									<input type="text" name="code" placeholder="Postal / Zip Code " required>
-								</span>
-                </div>
-            </li>
-        </ul>
-        <div class="submit_btn">
-            <input type="submit" value="Submit">
-        </div>
-    </form>
+
+        <h1>Restaurant Form</h1>
+
+        <form class="form-mini" method="post" action="#">
+
+            <div class="form-row">
+                <input type="text" name="name" placeholder="Restaurant Name">
+            </div>
+            <div class="form-row">
+                <input type="text" name="Address" placeholder="Address">
+                <input type="text" name="Street Address" placeholder="Street Address">
+                <input type="text" name="Landmark" placeholder="Landmark">
+                <input type="text" name="City" placeholder="City">
+                <input type="text" name="State" placeholder="State">
+                <input type="text" name="Zipcode" placeholder="Zipcode">
+            </div>
+
+            <div class="form-row">
+                <input type="email" name="Phone Number" placeholder="Phone Number">
+            </div>
+
+            <div class="form-row">
+                <input type="email" name="Upload Images" placeholder="UploadImages">
+                <button> Upload Images </button>
+            </div>
+
+
+            <div class="form-row form-last-row">
+                <button type="submit">Submit Form</button>
+            </div>
+
+        </form>
+    </div>
+
+
 </div>
-</div>
-</div>
+
 </body>
+
 </html>
