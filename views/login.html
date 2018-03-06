@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Login Form</title>
+    <style>
+
+        html{
+            background-color: #f3f3f3;
+        }
+
+        .form-login{
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+
+            font: bold 14px sans-serif;
+            text-align: center;
+        }
+
+        .form-log-in-with-email{
+            position: relative;
+            display: inline-block;
+            vertical-align: top;
+            margin-right: 130px;
+            text-align: center;
+        }
+
+        .form-log-in-with-email .form-white-background{
+            width: 570px;
+            box-sizing: border-box;
+            background-color: #ffffff;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 60px 80px;
+            margin-bottom: 32px;
+        }
+
+        .form-log-in-with-email .form-row{
+            text-align: left;
+            margin-bottom: 23px;
+        }
+
+        .form-log-in-with-email .form-title-row{
+            text-align: center;
+            margin-bottom: 60px;        }
+
+        .form-log-in-with-email .form-row > label span{
+            display: inline-block;
+            box-sizing: border-box;
+            color:  #5f5f5f;
+            width: 125px;
+            text-align: right;
+            padding-right: 25px;
+        }
+
+        .form-log-in-with-email input{
+            color:  #5f5f5f;
+            box-sizing: border-box;
+            width: 230px;
+            box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.08);
+            padding: 12px 18px;
+            border: 1px solid #dbdbdb;
+        }
+
+        .form-log-in-with-email button{
+            display: block;
+            border-radius: 2px;
+            background-color:  #6caee0;
+            color: #ffffff;
+            font-weight: bold;
+            box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.08);
+            padding: 15px 35px;
+            border: 0;
+            margin: 55px auto 0;
+            cursor: pointer;
+        }
+
+        .form-log-in-with-email .form-forgotten-password,
+        .form-log-in-with-email .form-create-an-account{
+            text-decoration: none;
+            padding: 4px 8px;
+            font-weight: normal;
+        }
+    </style>
+
+</head>
+<body>
+<div class="main-content">
+
+    <form class="form-login" method="post" action="#">
+
+        <div class="form-log-in-with-email">
+
+            <div class="form-white-background">
+
+                <div class="form-title-row">
+                    <h1>Log in</h1>
+                </div>
+
+                <div class="form-row">
+                    <label>
+                        <span>Email</span>
+                        <input type="email" name="email" placeholder="Enter Your Email">
+                    </label>
+                </div>
+
+                <div class="form-row">
+                    <label>
+                        <span>Password</span>
+                        <input type="password" name="password" placeholder="Enter Your Password">
+                    </label>
+                </div>
+
+                <div class="form-row">
+                    <button type="submit">Log in</button>
+                </div>
+
+            </div>
+
+            <a href="#" class="form-forgotten-password">Forgotten password &middot;</a>
+            <a href="#" class="form-create-an-account">Create an account &rarr;</a>
+
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>
