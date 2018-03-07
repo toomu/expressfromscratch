@@ -1,7 +1,7 @@
 {
   "name": "expressscrath",
   "scripts": {
-    "start": "nodejs app.js"
+    "start": "nodemon app.js"
   },
   "dependencies": {
     "connect-mongo": "^2.0.1",
