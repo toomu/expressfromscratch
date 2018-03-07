@@ -7,7 +7,7 @@ var app = express();
 
 var session = require("express-session");
 const MongoStore = require('connect-mongo')(session);
-  
+
 app.use(session({
   resave: true,
   saveUninitialized: true,
@@ -109,8 +109,6 @@ router2.post('/restaurants', function(req, res, next) {
   });
 
 });
-
-
 
 router2.get('/restaurants', function(req, res, next) {
 
