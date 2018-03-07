@@ -59,10 +59,15 @@ mongoose.connection.on("error", function(err){
 
 
 var restaurantSchema = new mongoose.Schema({
-  name: {type:String, required:true},
+  restaurantname: {type:String, required:true},
   description: {type:String, default:"wtf"},
-  phone: String,
-  address:String,
+phonenumber: {type:String,required:true},
+  address:{type:String,required:true},
+
+
+
+
+
   // menu : [],
   // images : []
 });
@@ -103,13 +108,38 @@ var router2 = express.Router();
 
 router2.post('/restaurants', function(req, res, next) {
 
+
+
+  req.checkBody('restaurantname','restaurantname is required').notEmpty;
+  req.checkBody('description','description is required').notEmpty;
+  req.checkBody('phonenumber','Invalid phonenumber').isLength({11}).isphonenumber();
+  req.checkBody('address','address is required').notEmpty;
+
+
   // console.log(req.body);
 
   var res1 = new Restaurant({
-    name: req.body.name
+    restaurantname: req.body.restaurantname,
+    description:req.body.description,
+    phonenumber:req.body.phonenumber,
+    address:req.body.address
+
   })
 
+  ////
+  //const { checkSchema } = require('express-validator/check');
+////  app.post('/restaurants', function(req, res,next){
+//  console.log(req.body);
+//req.checkBody{restaurantsName
+  req.checkBody('firstname','firstname is required').notEmpty;
 
+}
+
+});
+
+
+
+//////
   res1.save(function(err){
     if(err){
       console.log(err);
@@ -262,10 +292,10 @@ app.use(function(err, req,res, next){ //errrenderfucntion
     res.locals.message = err.message;
 
 
-    
+
     console.log(err);
 
-    res.render("error", {err:err, common:"common"});
+    res.json( {err:err, common:"common"});
   }
 
 })
@@ -276,9 +306,3 @@ app.use(function(err, req,res, next){ //errrenderfucntion
 // process.exit();
 
 //morgan, bodyparser, creator router, router2 , errfunction, errrenderfunction
-
-
-
-
-
-
