@@ -262,6 +262,7 @@ app.use(function(err, req,res, next){ //errrenderfucntion
     res.locals.message = err.message;
 
 
+    
     console.log(err);
 
     res.render("error", {err:err, common:"common"});
