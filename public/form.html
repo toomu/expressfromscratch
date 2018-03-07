@@ -5,22 +5,26 @@
     <title>Form</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
+
 <body>
+
 <div class="container">
     <div class="row">
         <div class="col-md-4">
-            <div class="form_main">
-                <h4 class="heading"><strong>Restaurant </strong> Menu <span></span></h4>
-                <div class="form">
-                    <form>
-                        <br><br> <input type="text" required="" placeholder="Name of the dish"  >
-                        <br><br><input type="text" required="" placeholder="Price">
-                        <br><br><input type="text" required="" placeholder="Tags">
-                        <br><br>  <input type="file" accept="image/*">
+            <div>
+                <h4><strong>Restaurant </strong> Menu <span></span></h4>
+                <div>
+                    <form  method="post" id="restaurent" action="#">
+                        <br><br> <input type="text" name="men"  placeholder="Name of the dish" id="menu1" name="menu"  >
+                        <br><br><input type="text"  name="men1" placeholder="Price" id="menu2">
+                        <br><br><input type="text"  name="men2" placeholder="Tags" id="menu3">
+                        <br><br>  <input type="file" name="men3" accept="image/*" id="menu4">
 
-                        <br><br><input type="text" required="" value="Select your type" ><br><input type="radio" name="Item" value="Vej" checked> vegetarian <br>
-                        <input type="radio" name="Item" value="Non-vej">Non- vegetarian <br>
-                        <input type="radio" name="Item" value="Non-vej"> vegetarian <br>
+                        <br><br>
+                        <input type="text" name="men4"  id="menu5" value="Select your type"><br>
+                        <input type="radio" name="men5" id="menu6" name="Item" value="Vej" checked> vegetarian <br>
+                        <input type="radio"  name="men6" value="Non-vej" id="menu7">Non- vegetarian <br>
+                        <input type="radio" name="men7"  value="Non-vej"id="menu8"> vegetarian <br>
                         <br><br>
 
 
@@ -35,14 +39,47 @@
 
                             </optgroup>
                         </select>
-                       <br><br> <textarea rows="4" cols="50" >Enter text here...</textarea>
+                       <br><br> <textarea name="men7" rows="4" cols="50" id="menu10">Enter text here...</textarea>
 
-                        <br><br><input type="submit" value="submit">
+                        <br><br><input type="submit"  value="submit" name="men8" id="menu11">
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#restaurent').click( function(e) {
+                e.preventDefault();
+                var data;
+                $.ajax({
+                    data: {
+                        men: $('#menu1').val(),
+                        men1: $('#menu2').val(),
+                        men2: $('#menu3').val(),
+                        men3: $('#menu4').val(),
+                        men4: $('#menu5').val(),
+                        men5: $('#menu6').val(),
+                        men6: $('#menu7').val(),
+                        men7: $('#menu8').val()
+                    },
+                    data: data,
+                    dataType: "json",
+                    url:"/menulist",
+                    method:"POST",
+                    error: function (){
+                        console.log(arguments)
+                    },
+                    success: function(result){
+                        alert(result);
+                    }
+                } );
+            } );
+        } );
+
+</script>
 </body>
 </html>

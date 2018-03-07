@@ -13,14 +13,14 @@ var session = require("express-session");
 const MongoStore = require('connect-mongo')(session);
 
 app.use(session({
-  resave: true,
-  saveUninitialized: true,
-  secret: "supersecret",
-  store: new MongoStore({
-    url: "mongodb://localhost:27017/test",
-    autoReconnect: true,
-    clear_interval: 3600
-  })
+    resave: true,
+    saveUninitialized: true,
+    secret: "supersecret",
+    store: new MongoStore({
+        url: "mongodb://localhost:27017/test",
+        autoReconnect: true,
+        clear_interval: 3600
+    })
 }));
 
 app.use(expressValidator());
@@ -41,8 +41,8 @@ var cookieParser = require('cookie-parser')
 app.use(cookieParser())
 
 app.use(function(req, res, next) {
-  console.log('Cookies: ', req.cookies);
-  next();
+    console.log('Cookies: ', req.cookies);
+    next();
 })
 
 
@@ -52,19 +52,19 @@ app.use(logger('dev'));
 mongoose.connect("mongodb://localhost:27017/test");
 
 mongoose.connection.on("error", function(err){
-  console.log(err);
-  process.exit();
+    console.log(err);
+    process.exit();
 
 });
 
 
 var restaurantSchema = new mongoose.Schema({
-  name: {type:String, required:true},
-  description: {type:String, default:"wtf"},
-  phone: String,
-  address:String,
-  // menu : [],
-  // images : []
+    name: {type:String, required:true},
+    description: {type:String, default:"wtf"},
+    phone: String,
+    address:String,
+    // menu : [],
+    // images : []
 });
 
 var menuSchema = new mongoose.Schema({
@@ -104,9 +104,9 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
 app.use(function(req, res, next) {
-  // console.log(next.toString());
-  res.locals.creator = "kamal"
-  next();
+    // console.log(next.toString());
+    res.locals.creator = "kamal"
+    next();
 });
 
 
@@ -118,23 +118,23 @@ var router2 = express.Router();
 
 router2.post('/restaurants', function(req, res, next) {
 
-  // console.log(req.body);
+    // console.log(req.body);
 
-  var res1 = new Restaurant({
-    name: req.body.name
-  })
-
-
-  res1.save(function(err){
-    if(err){
-      console.log(err);
-      res.json({"status":err})
-    }else{
-      res.json({"status":"success"});
-    }
+    var res1 = new Restaurant({
+        name: req.body.name
+    })
 
 
-  });
+    res1.save(function(err){
+        if(err){
+            console.log(err);
+            res.json({"status":err})
+        }else{
+            res.json({"status":"success"});
+        }
+
+
+    });
 
 });
 
@@ -209,27 +209,27 @@ router2.patch('/menulist/:id', function(req, res, next) {
 
 router2.get('/restaurants', function(req, res, next) {
 
-  Restaurant.find({}, function(err, restaurants) {
+    Restaurant.find({}, function(err, restaurants) {
 
-    if(err){
-      res.json({err:err});
-    }else{
-      res.send(restaurants);
-    }
-  });
+        if(err){
+            res.json({err:err});
+        }else{
+            res.send(restaurants);
+        }
+    });
 
 
 });
 
 router2.get('/restaurants/:id', function(req, res, next) {
 
-  Restaurant.findById(req.params.id, function(err, restaurant) {
-    if(err){
-      res.json({err:err});
-    }else{
-      res.json(restaurant);
-    }
-  });
+    Restaurant.findById(req.params.id, function(err, restaurant) {
+        if(err){
+            res.json({err:err});
+        }else{
+            res.json(restaurant);
+        }
+    });
 
 
 });
@@ -237,18 +237,18 @@ router2.get('/restaurants/:id', function(req, res, next) {
 router2.delete('/restaurants/:id', function(req, res, next) {
 
 
-  console.log(req.params);
+    console.log(req.params);
 
-  Restaurant.remove({ _id: req.params.id}, function(err) {
-    if (err) {
-      res.json({err:err});
-    }
-    else {
-      res.json({
-        status:"success"
-      })
-    }
-  });
+    Restaurant.remove({ _id: req.params.id}, function(err) {
+        if (err) {
+            res.json({err:err});
+        }
+        else {
+            res.json({
+                status:"success"
+            })
+        }
+    });
 
 
 });
@@ -256,24 +256,24 @@ router2.delete('/restaurants/:id', function(req, res, next) {
 router2.patch('/restaurants/:id', function(req, res, next) {
 
 
-  console.log(req.params);
+    console.log(req.params);
 
-  Restaurant.findByIdAndUpdate(req.params.id, { $set: { name: req.body.name }},{new:true}, function (err, restaurant) {
-    if (err){
-      res.json({err:err})
-    }else{
-      res.json({restaurant:restaurant});
-    }
-  });
+    Restaurant.findByIdAndUpdate(req.params.id, { $set: { name: req.body.name }},{new:true}, function (err, restaurant) {
+        if (err){
+            res.json({err:err})
+        }else{
+            res.json({restaurant:restaurant});
+        }
+    });
 
 });
 
 router2.post('/upload', upload.single('myFile'), function(req,res,next){
-  res.json({status:"success"});
+    res.json({status:"success"});
 });
 
 router2.get('/download/:file', function(req,res,next){
-  res.sendFile(__dirname + "/uploads/" + req.params.file);
+    res.sendFile(__dirname + "/uploads/" + req.params.file);
 });
 
 
@@ -295,9 +295,9 @@ app.use(expressValidator());
 app.use(function(req,res,next){ //errfunction
 
 
-  var err = new Error("Not found");
-  err.status =404;
-  next(err);
+    var err = new Error("Not found");
+    err.status =404;
+    next(err);
 
 });
 
@@ -341,16 +341,16 @@ app.use(function (req, res, next) {
 
 app.use(function(err, req,res, next){ //errrenderfucntion
 
-  if(err){
+    if(err){
 
-    res.locals.message = err.message;
+        res.locals.message = err.message;
 
 
-    
-    console.log(err);
 
-    res.render("error", {err:err, common:"common"});
-  }
+        console.log(err);
+
+        res.render("error", {err:err, common:"common"});
+    }
 
 })
 
