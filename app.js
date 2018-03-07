@@ -117,7 +117,7 @@ router2.get('/restaurants', function(req, res, next) {
     if(err){
       res.json({err:err});
     }else{
-      res.json({restaurants: restaurants});
+      res.send(restaurants);
     }
   });
 
