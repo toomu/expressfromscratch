@@ -26,8 +26,6 @@ app.use(session({
 
 app.use(expressValidator());
 
-////////////////////////////////////////////////////////
-
 var multer = require("multer");
 
 
@@ -74,7 +72,6 @@ mongoose.connection.on("error", function(err){
 
 });
 
-
 var port = 3000
 app.set('port', port);
 
@@ -92,8 +89,6 @@ app.use(function(req, res, next) {
     res.locals.creator = "kamal"
     next();
 });
-
-
 
 var router = express.Router();
 
@@ -120,9 +115,12 @@ app.use(function(req,res,next){ //errfunction
 
 var restaurantSchema = new mongoose.Schema({
   name: {type:String, required:true},
-  description: {type:String, default:"wtf"},
-  phone: String,
+  state: String,
   address:String,
+    landmark:String,
+    city:String,
+    zipcode:String,
+    phonenumber:String
   // menu : [],
   // images : []
 });
@@ -133,13 +131,33 @@ var Restaurant = mongoose.model("Restaurant" , restaurantSchema);
 router2.post('/restaurants', function(req, res, next) {
       // console.log(req.body);
   var res1 = new Restaurant({
-    name: req.body.name
+
+      name: req.body.name,
+      address: req.body.address,
+      state:req.body.state,
+      landmark:req.body.landmark,
+      city:req.body.city,
+      zipcode:req.body.zipcode,
+      phonenumber:req.body.phonenumber
+
   })
-  res1.save(function(err){
+
+  ////
+  //const { checkSchema } = require('express-validator/check');
+////  app.post('/restaurants', function(req, res,next){
+//  console.log(req.body);
+//req.checkBody{restaurantsName
+  req.checkBody('firstname','firstname is required').notEmpty;
+
+}
+
+  res1.save(function(err,data){
+
     if(err){
       console.log(err);
       res.json({"status":err})
     }else{
+        console.log(data)
       res.json({"status":"success"});
     }
   });
@@ -347,8 +365,8 @@ router2.post('/signup', function(req, res, next) {
 
         if (err) {
 
-            res.locals.message = err.message;
-            console.log(err);
+    res.locals.message = err.message;
+    console.log(err);
 
             res.json({err: err});
         }
