@@ -67,19 +67,19 @@
         <form class="form-mini" method="post" action="#">
 
             <div class="form-row">
-                <input type="text" name="name" placeholder="Restaurant Name">
+                <input type="text" name="name" placeholder="Restaurant Name" id="id1">
             </div>
             <div class="form-row">
-                <input type="text" name="Address" placeholder="Address">
-                <input type="text" name="Street Address" placeholder="Street Address">
-                <input type="text" name="Landmark" placeholder="Landmark">
-                <input type="text" name="City" placeholder="City">
-                <input type="text" name="State" placeholder="State">
-                <input type="text" name="Zipcode" placeholder="Zipcode">
+                <input type="text" name="Address" placeholder="Address" id="id2">
+                <input type="text" name="Street Address" placeholder="Street Address" id="id3">
+                <input type="text" name="Landmark" placeholder="Landmark" id="4">
+                <input type="text" name="City" placeholder="City" id="id5">
+                <input type="text" name="State" placeholder="State" id="id6">
+                <input type="text" name="Zipcode" placeholder="Zipcode" id="id7">
             </div>
 
             <div class="form-row">
-                <input type="email" name="Phone Number" placeholder="Phone Number">
+                <input type="email" name="Phonenumber" placeholder="Phone number" id="id8">
             </div>
 
             <!--<div class="form-row">-->
@@ -94,11 +94,7 @@
 
         </form>
     </div>
-
-
 </div>
-
-
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
@@ -108,6 +104,17 @@
             $.ajax({
                 "method":"POST",
                 url: "/restaurants",
+                data: {
+                    name: $('#id1').val(),
+                    address: $('#id2').val(),
+                    state:$('#id6').val(),
+                    landmark:$('#id4').val(),
+                    city:$('#id5').val(),
+                    zipcode:$('#id7').val(),
+                    phonenumber:$('#id8').val()
+
+                },
+
                 success: function(result){
                    console.log(result)
                 }});

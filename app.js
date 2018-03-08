@@ -100,9 +100,12 @@ app.use(function(req,res,next){ //errfunction
 
 var restaurantSchema = new mongoose.Schema({
   name: {type:String, required:true},
-  description: {type:String, default:"wtf"},
-  phone: String,
+  state: String,
   address:String,
+    landmark:String,
+    city:String,
+    zipcode:String,
+    phonenumber:String
   // menu : [],
   // images : []
 });
@@ -113,13 +116,22 @@ var Restaurant = mongoose.model("Restaurant" , restaurantSchema);
 router2.post('/restaurants', function(req, res, next) {
       // console.log(req.body);
   var res1 = new Restaurant({
-    name: req.body.name
+      name: req.body.name,
+      address: req.body.address,
+      state:req.body.state,
+      landmark:req.body.landmark,
+      city:req.body.city,
+      zipcode:req.body.zipcode,
+      phonenumber:req.body.phonenumber
   })
-  res1.save(function(err){
+
+
+  res1.save(function(err,data){
     if(err){
       console.log(err);
       res.json({"status":err})
     }else{
+        console.log(data)
       res.json({"status":"success"});
     }
   });
@@ -206,10 +218,10 @@ var User = mongoose.model('User', userSchema);
 
 router2.post('/signup', function(req, res, next) {
 
-    req.checkBody('firstname','firstname is required').notEmpty;
-    req.checkBody('lastname','lastname is required').notEmpty;
-    req.checkBody('email','Invalid email address').notEmpty.isEmail();
-    req.checkBody('password','password is invalid').isLength({min:6}).equals(req.body.confirmpassword);
+    // req.checkBody('firstname','firstname is required').notEmpty;
+    // req.checkBody('lastname','lastname is required').notEmpty;
+    // req.checkBody('email','Invalid email address').notEmpty.isEmail();
+    // req.checkBody('password','password is invalid').isLength({min:6}).equals(req.body.confirmpassword);
 
 
     var user = new User({ firstName:req.body.firstname ,lastName:req.body.lastname,yourEmail:req.body.email,yourPassword:req.body.password});
