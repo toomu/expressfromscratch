@@ -27,7 +27,19 @@ app.use(session({
 app.use(expressValidator());
 
 var multer = require("multer");
-const upload = multer({ dest: path.join(__dirname, 'uploads') });
+
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null,path.join(__dirname, 'uploads'))
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now())
+    }
+})
+
+var upload = multer({ storage: storage }).single("myFile");
+
 
 
 var favicon = require('serve-favicon');
@@ -187,7 +199,7 @@ router2.patch('/restaurants/:id', function(req, res, next) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-router2.post('/upload', upload.single('myFile'), function(req,res,next){
+router2.post('/upload', function(req,res,next){
   res.json({status:"success"});
 });
 
@@ -201,7 +213,8 @@ var userSchema = mongoose.Schema({
     firstName: { type:String,required:true},
     lastName: { type:String,required:true},
     yourEmail: { type:String,required:true},
-    yourPassword: { type:String,required:true}
+    yourPassword: { type:String,required:true},
+    profileImage: { type:String}
 
 
 });
@@ -209,6 +222,16 @@ var userSchema = mongoose.Schema({
 var User = mongoose.model('User', userSchema);
 
 router2.post('/signup', function(req, res, next) {
+
+
+
+    console.log(req.body)
+    upload(req,res,function(err) {
+        if(err) {
+            return console.log(err)
+        }
+        console.log(req)
+    });
 
     req.checkBody('firstName','firstname is required').notEmpty();
     req.checkBody('lastName','lastname is required').notEmpty();
@@ -220,7 +243,7 @@ router2.post('/signup', function(req, res, next) {
     var errors = req.validationErrors();
 
 
-    console.log(errors);
+    // console.log(errors);
     if (errors) {
         res.json({"status": errors})
     } else {
@@ -231,6 +254,7 @@ router2.post('/signup', function(req, res, next) {
             lastName: req.body.lastName,
             yourEmail: req.body.email,
             yourPassword: req.body.password,
+            profileImage: req.body.myFail,
         });
 
         user.save(function (err) {
