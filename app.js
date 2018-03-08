@@ -137,19 +137,10 @@ router2.post('/restaurants', function(req, res, next) {
       state:req.body.state,
       landmark:req.body.landmark,
       city:req.body.city,
-      zipcode:req.body.zipcode,
-      phonenumber:req.body.phonenumber
+      zipCode:req.body.zipCode,
+      phoneNumber:req.body.phoneNumber
 
   })
-
-  ////
-  //const { checkSchema } = require('express-validator/check');
-////  app.post('/restaurants', function(req, res,next){
-//  console.log(req.body);
-//req.checkBody{restaurantsName
-  req.checkBody('firstname','firstname is required').notEmpty;
-
-}
 
   res1.save(function(err,data){
 
@@ -274,7 +265,7 @@ router2.post('/signup', function(req, res, next) {
                 lastName: req.body.lastName,
                 yourEmail: req.body.email,
                 yourPassword: req.body.password,
-                profileImage: req.body.myFail,
+                profileImage: req.body.myFail
             });
 
             user.save(function (err) {
@@ -334,12 +325,12 @@ router2.post('/signup', function(req, res, next) {
     router2.patch('/users/:id', function (req, res, next) {
 
 
-        console.log(req.params);
+        console.log(req.params, req.body);
 
         User.findByIdAndUpdate(req.params.id, {
             $set: {
-                firstName: req.body.firstname,
-                lastName: req.body.lastname,
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
                 yourEmail: req.body.email,
                 yourPassword: req.body.password
             }
