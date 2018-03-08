@@ -1,2 +1,7 @@
 settimeout in for loop - let vs var
 CI
+
+
+
+product to-do's:
+1. update user profile
