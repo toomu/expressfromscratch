@@ -25,9 +25,6 @@ app.use(session({
 
 app.use(expressValidator());
 
-
-
-
 var multer = require("multer");
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
@@ -58,25 +55,6 @@ mongoose.connection.on("error", function(err){
 });
 
 
-var restaurantSchema = new mongoose.Schema({
-  restaurantname: {type:String, required:true},
-  description: {type:String, default:"wtf"},
-phonenumber: {type:String,required:true},
-  address:{type:String,required:true},
-
-
-
-
-
-  // menu : [],
-  // images : []
-});
-
-
-var Restaurant = mongoose.model("Restaurant" , restaurantSchema);
-
-
-
 var port = 3000
 app.set('port', port);
 
@@ -84,45 +62,69 @@ var server = http.createServer(app);
 
 server.listen(port);
 
-
-
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 app.set('views', path.join(__dirname, 'views'));
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
+
 
 app.use(function(req, res, next) {
-  // console.log(next.toString());
-  res.locals.creator = "kamal"
-  next();
+    // console.log(next.toString());
+    res.locals.creator = "kamal"
+    next();
 });
-
 
 var router = express.Router();
 
 var router2 = express.Router();
 
+app.use(router)
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(router2)
+
+app.use(expressValidator());
+
+app.use(function(req,res,next){ //errfunction
+
+
+    var err = new Error("Not found");
+    err.status =404;
+    next(err);
+
+});
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+var restaurantSchema = new mongoose.Schema({
+  name: {type:String, required:true},
+  state: String,
+  address:String,
+    landmark:String,
+    city:String,
+    zipcode:String,
+    phonenumber:String
+  // menu : [],
+  // images : []
+});
+
+
+var Restaurant = mongoose.model("Restaurant" , restaurantSchema);
 
 router2.post('/restaurants', function(req, res, next) {
-
-
-
-  req.checkBody('restaurantname','restaurantname is required').notEmpty;
-  req.checkBody('description','description is required').notEmpty;
-  req.checkBody('phonenumber','Invalid phonenumber').isLength({11}).isphonenumber();
-  req.checkBody('address','address is required').notEmpty;
-
-
-  // console.log(req.body);
-
+      // console.log(req.body);
   var res1 = new Restaurant({
-    restaurantname: req.body.restaurantname,
-    description:req.body.description,
-    phonenumber:req.body.phonenumber,
-    address:req.body.address
+
+      name: req.body.name,
+      address: req.body.address,
+      state:req.body.state,
+      landmark:req.body.landmark,
+      city:req.body.city,
+      zipcode:req.body.zipcode,
+      phonenumber:req.body.phonenumber
 
   })
 
@@ -135,23 +137,19 @@ router2.post('/restaurants', function(req, res, next) {
 
 }
 
-});
+  res1.save(function(err,data){
 
-
-
-//////
-  res1.save(function(err){
     if(err){
       console.log(err);
       res.json({"status":err})
     }else{
+        console.log(data)
       res.json({"status":"success"});
     }
-
-
   });
-
 });
+
+
 
 router2.get('/restaurants', function(req, res, next) {
 
@@ -163,8 +161,6 @@ router2.get('/restaurants', function(req, res, next) {
       res.send(restaurants);
     }
   });
-
-
 });
 
 router2.get('/restaurants/:id', function(req, res, next) {
@@ -176,12 +172,9 @@ router2.get('/restaurants/:id', function(req, res, next) {
       res.json(restaurant);
     }
   });
-
-
 });
 
 router2.delete('/restaurants/:id', function(req, res, next) {
-
 
   console.log(req.params);
 
@@ -195,8 +188,6 @@ router2.delete('/restaurants/:id', function(req, res, next) {
       })
     }
   });
-
-
 });
 
 router2.patch('/restaurants/:id', function(req, res, next) {
@@ -214,6 +205,8 @@ router2.patch('/restaurants/:id', function(req, res, next) {
 
 });
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 router2.post('/upload', upload.single('myFile'), function(req,res,next){
   res.json({status:"success"});
 });
@@ -222,37 +215,7 @@ router2.get('/download/:file', function(req,res,next){
   res.sendFile(__dirname + "/uploads/" + req.params.file);
 });
 
-
-
-
-app.use(router)
-
-
-var bodyParser = require('body-parser');
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
-app.use(router2)
-
-
-
-app.use(expressValidator());
-
-app.use(function(req,res,next){ //errfunction
-
-
-  var err = new Error("Not found");
-  err.status =404;
-  next(err);
-
-});
-
-
-
-
-router2.get('/signup', function(req, res, next) {
-    res.render('signupp.html', { title: 'signup' });
-});
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var userSchema = mongoose.Schema({
     firstName: { type:String,required:true},
@@ -263,21 +226,84 @@ var userSchema = mongoose.Schema({
 
 });
 
-var user = mongoose.model('user', userSchema);
+var User = mongoose.model('User', userSchema);
 
 router2.post('/signup', function(req, res, next) {
 
-    req.checkBody('firstname','firstname is required').notEmpty;
-    req.checkBody('lastname','lastname is required').notEmpty;
-    req.checkBody('email','Invalid email address').notEmpty.isEmail();
-    req.checkBody('password','password is invalid').isLength({min:6}).equals(req.body.confirmpassword);
+    // req.checkBody('firstname','firstname is required').notEmpty;
+    // req.checkBody('lastname','lastname is required').notEmpty;
+    // req.checkBody('email','Invalid email address').notEmpty.isEmail();
+    // req.checkBody('password','password is invalid').isLength({min:6}).equals(req.body.confirmpassword);
 
 
-    var data = new user({ firstName:req.body.firstname ,lastName:req.body.lastname,yourEmail:req.body.email,yourPassword:req.body.password});
-    data.save();
-    res.render('signupp.html', { title: 'signup' });
+    var user = new User({ firstName:req.body.firstname ,lastName:req.body.lastname,yourEmail:req.body.email,yourPassword:req.body.password});
+    user.save(function(err){
+        if(err){
+            console.log(err);
+            res.json({"status":err})
+        }else{
+            res.json({"status":"success"});
+        }
+    });
 
 });
+
+
+router2.get('/users', function(req, res, next) {
+
+    User.find({}, function(err, user) {
+
+        if(err){
+            res.json({err:err});
+        }else{
+            res.send(user);
+        }
+    });
+});
+
+router2.get('/users/:id', function(req, res, next) {
+
+    User.findById(req.params.id, function(err, user) {
+        if(err){
+            res.json({err:err});
+        }else{
+            res.json(user);
+        }
+    });
+});
+
+router2.delete('/users/:id', function(req, res, next) {
+
+    console.log(req.params);
+
+    User.remove({ _id: req.params.id}, function(err) {
+        if (err) {
+            res.json({err:err});
+        }
+        else {
+            res.json({
+                status:"success"
+            })
+        }
+    });
+});
+
+router2.patch('/users/:id', function(req, res, next) {
+
+
+    console.log(req.params);
+
+    User.findByIdAndUpdate(req.params.id, { $set: {firstName:req.body.firstname ,lastName:req.body.lastname,yourEmail:req.body.email,yourPassword:req.body.password}},{new:true}, function (err, user) {
+        if (err){
+            res.json({err:err})
+        }else{
+            res.json({user:user});
+        }
+    });
+
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.use(require('connect-flash')());
 app.use(function (req, res, next) {
@@ -296,11 +322,10 @@ app.use(function(err, req,res, next){ //errrenderfucntion
     console.log(err);
 
     res.json( {err:err, common:"common"});
+
   }
 
 })
-
-
 
 // console.log(process)
 // process.exit();
