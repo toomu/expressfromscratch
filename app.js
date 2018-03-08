@@ -54,6 +54,7 @@ mongoose.connection.on("error", function(err){
 
 });
 
+
 var port = 3000
 app.set('port', port);
 
@@ -116,6 +117,7 @@ var Restaurant = mongoose.model("Restaurant" , restaurantSchema);
 router2.post('/restaurants', function(req, res, next) {
       // console.log(req.body);
   var res1 = new Restaurant({
+
       name: req.body.name,
       address: req.body.address,
       state:req.body.state,
@@ -123,10 +125,20 @@ router2.post('/restaurants', function(req, res, next) {
       city:req.body.city,
       zipcode:req.body.zipcode,
       phonenumber:req.body.phonenumber
+
   })
 
+  ////
+  //const { checkSchema } = require('express-validator/check');
+////  app.post('/restaurants', function(req, res,next){
+//  console.log(req.body);
+//req.checkBody{restaurantsName
+  req.checkBody('firstname','firstname is required').notEmpty;
+
+}
 
   res1.save(function(err,data){
+
     if(err){
       console.log(err);
       res.json({"status":err})
@@ -304,9 +316,13 @@ app.use(function(err, req,res, next){ //errrenderfucntion
   if(err){
 
     res.locals.message = err.message;
+
+
+
     console.log(err);
 
-    res.json({err:err, common:"common"});
+    res.json( {err:err, common:"common"});
+
   }
 
 })
@@ -315,9 +331,3 @@ app.use(function(err, req,res, next){ //errrenderfucntion
 // process.exit();
 
 //morgan, bodyparser, creator router, router2 , errfunction, errrenderfunction
-
-
-
-
-
-
