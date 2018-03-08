@@ -26,6 +26,8 @@ app.use(session({
 
 app.use(expressValidator());
 
+////////////////////////////////////////////////////////
+
 var multer = require("multer");
 
 
@@ -40,7 +42,7 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage }).single("myFile");
 
-
+//////////////////////////////////////////////////////////////
 
 var favicon = require('serve-favicon');
 
@@ -225,47 +227,47 @@ router2.post('/signup', function(req, res, next) {
 
 
 
-    console.log(req.body)
+    // console.log(req.body)
     upload(req,res,function(err) {
         if(err) {
             return console.log(err)
         }
-        console.log(req)
+        // console.log(req);
+        req.checkBody('firstName','firstname is required').notEmpty();
+        req.checkBody('lastName','lastname is required').notEmpty();
+        req.checkBody('email', 'email is required').notEmpty();
+        req.checkBody('email', 'Invalid email address').isEmail();
+        req.checkBody('password', 'password required').notEmpty();
+        req.checkBody('password', 'password is short - min 6 char required').isLength({min: 6});
+
+        var errors = req.validationErrors();
+
+
+        // console.log(errors);
+        if (errors) {
+            res.json({"status": errors})
+        } else {
+
+
+            var user = new User({
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                yourEmail: req.body.email,
+                yourPassword: req.body.password,
+                profileImage: req.body.myFail,
+            });
+
+            user.save(function (err) {
+                if (err) {
+                    console.log(err);
+                    res.json({"status": err})
+                } else {
+                    res.json({"status": "success"})
+                }
+            });
+        }
     });
 
-    req.checkBody('firstName','firstname is required').notEmpty();
-    req.checkBody('lastName','lastname is required').notEmpty();
-    req.checkBody('email', 'email is required').notEmpty();
-    req.checkBody('email', 'Invalid email address').isEmail();
-    req.checkBody('password', 'password required').notEmpty();
-    req.checkBody('password', 'password is short - min 6 char required').isLength({min: 6});
-
-    var errors = req.validationErrors();
-
-
-    // console.log(errors);
-    if (errors) {
-        res.json({"status": errors})
-    } else {
-
-
-        var user = new User({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            yourEmail: req.body.email,
-            yourPassword: req.body.password,
-            profileImage: req.body.myFail,
-        });
-
-        user.save(function (err) {
-            if (err) {
-                console.log(err);
-                res.json({"status": err})
-            } else {
-                res.json({"status": "success"})
-            }
-        });
-    }
 });
 
 
