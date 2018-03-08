@@ -2,11 +2,12 @@ var express = require("express");
 var http = require('http');
 var path = require('path');
 var expressValidator = require("express-validator");
-var flash = require('connect-flash');
+// var flash = require('connect-flash');
 
 var mongoose = require("mongoose");
 
 var app = express();
+var bodyParser = require('body-parser');
 
 
 var session = require("express-session");
@@ -26,8 +27,22 @@ app.use(session({
 app.use(expressValidator());
 
 var multer = require("multer");
-const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null,path.join(__dirname, 'uploads'))
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now())
+        // console.log(req);
+        // cb(null, req.body.email + '-' + Date.now())
+    }
+})
+
+var upload = multer({ storage: storage }).single("myFile");
+
+//////////////////////////////////////////////////////////////
 
 var favicon = require('serve-favicon');
 
@@ -40,8 +55,11 @@ app.use(cookieParser())
 app.use(function(req, res, next) {
   console.log('Cookies: ', req.cookies);
   next();
-})
+});
 
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 var logger = require('morgan');
 app.use(logger('dev'));
@@ -53,7 +71,6 @@ mongoose.connection.on("error", function(err){
   process.exit();
 
 });
-
 
 var port = 3000
 app.set('port', port);
@@ -79,9 +96,6 @@ var router2 = express.Router();
 
 app.use(router)
 
-var bodyParser = require('body-parser');
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(router2)
 
@@ -123,19 +137,10 @@ router2.post('/restaurants', function(req, res, next) {
       state:req.body.state,
       landmark:req.body.landmark,
       city:req.body.city,
-      zipcode:req.body.zipcode,
-      phonenumber:req.body.phonenumber
+      zipCode:req.body.zipCode,
+      phoneNumber:req.body.phoneNumber
 
   })
-
-  ////
-  //const { checkSchema } = require('express-validator/check');
-////  app.post('/restaurants', function(req, res,next){
-//  console.log(req.body);
-//req.checkBody{restaurantsName
-  req.checkBody('firstname','firstname is required').notEmpty;
-
-}
 
   res1.save(function(err,data){
 
@@ -207,7 +212,7 @@ router2.patch('/restaurants/:id', function(req, res, next) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-router2.post('/upload', upload.single('myFile'), function(req,res,next){
+router2.post('/upload', function(req,res,next){
   res.json({status:"success"});
 });
 
@@ -215,13 +220,14 @@ router2.get('/download/:file', function(req,res,next){
   res.sendFile(__dirname + "/uploads/" + req.params.file);
 });
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var userSchema = mongoose.Schema({
     firstName: { type:String,required:true},
     lastName: { type:String,required:true},
     yourEmail: { type:String,required:true},
-    yourPassword: { type:String,required:true}
+    yourPassword: { type:String,required:true},
+    profileImage: { type:String}
 
 
 });
@@ -230,104 +236,134 @@ var User = mongoose.model('User', userSchema);
 
 router2.post('/signup', function(req, res, next) {
 
-    // req.checkBody('firstname','firstname is required').notEmpty;
-    // req.checkBody('lastname','lastname is required').notEmpty;
-    // req.checkBody('email','Invalid email address').notEmpty.isEmail();
-    // req.checkBody('password','password is invalid').isLength({min:6}).equals(req.body.confirmpassword);
 
 
-    var user = new User({ firstName:req.body.firstname ,lastName:req.body.lastname,yourEmail:req.body.email,yourPassword:req.body.password});
-    user.save(function(err){
-        if(err){
-            console.log(err);
-            res.json({"status":err})
-        }else{
-            res.json({"status":"success"});
+    // console.log(req.body)
+    upload(req,res,function(err) {
+        if(err) {
+            return console.log(err)
+        }
+        // console.log(req);
+        req.checkBody('firstName','firstname is required').notEmpty();
+        req.checkBody('lastName','lastname is required').notEmpty();
+        req.checkBody('email', 'email is required').notEmpty();
+        req.checkBody('email', 'Invalid email address').isEmail();
+        req.checkBody('password', 'password required').notEmpty();
+        req.checkBody('password', 'password is short - min 6 char required').isLength({min: 6});
+
+        var errors = req.validationErrors();
+
+
+        // console.log(errors);
+        if (errors) {
+            res.json({"status": errors})
+        } else {
+
+
+            var user = new User({
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                yourEmail: req.body.email,
+                yourPassword: req.body.password,
+                profileImage: req.body.myFail
+            });
+
+            user.save(function (err) {
+                if (err) {
+                    console.log(err);
+                    res.json({"status": err})
+                } else {
+                    res.json({"status": "success"})
+                }
+            });
         }
     });
 
 });
 
 
-router2.get('/users', function(req, res, next) {
 
-    User.find({}, function(err, user) {
+    router2.get('/users', function (req, res, next) {
 
-        if(err){
-            res.json({err:err});
-        }else{
-            res.send(user);
-        }
+        User.find({}, function (err, user) {
+
+            if (err) {
+                res.json({err: err})
+            } else {
+                res.send(user);
+            }
+        });
     });
-});
 
-router2.get('/users/:id', function(req, res, next) {
+    router2.get('/users/:id', function (req, res, next) {
 
-    User.findById(req.params.id, function(err, user) {
-        if(err){
-            res.json({err:err});
-        }else{
-            res.json(user);
-        }
+        User.findById(req.params.id, function (err, user) {
+            if (err) {
+                res.json({err: err});
+            } else {
+                res.json(user);
+            }
+        });
     });
-});
 
-router2.delete('/users/:id', function(req, res, next) {
+    router2.delete('/users/:id', function (req, res, next) {
 
-    console.log(req.params);
+        console.log(req.params);
 
-    User.remove({ _id: req.params.id}, function(err) {
+        User.remove({_id: req.params.id}, function (err) {
+            if (err) {
+                res.json({err: err});
+            }
+            else {
+                res.json({
+                    status: "success"
+                })
+            }
+        });
+    });
+
+    router2.patch('/users/:id', function (req, res, next) {
+
+
+        console.log(req.params, req.body);
+
+        User.findByIdAndUpdate(req.params.id, {
+            $set: {
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                yourEmail: req.body.email,
+                yourPassword: req.body.password
+            }
+        }, {new: true}, function (err, user) {
+            if (err) {
+                res.json({err: err})
+            } else {
+                res.json({user: user})
+            }
+        });
+
+    });
+//
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    app.use(require('connect-flash')());
+    app.use(function (req, res, next) {
+        res.locals.messages = require('express-messages')(req, res);
+        next();
+    });
+
+    app.use(function (err, req, res, next) { //errrenderfucntion
+
         if (err) {
-            res.json({err:err});
-        }
-        else {
-            res.json({
-                status:"success"
-            })
-        }
-    });
-});
-
-router2.patch('/users/:id', function(req, res, next) {
-
-
-    console.log(req.params);
-
-    User.findByIdAndUpdate(req.params.id, { $set: {firstName:req.body.firstname ,lastName:req.body.lastname,yourEmail:req.body.email,yourPassword:req.body.password}},{new:true}, function (err, user) {
-        if (err){
-            res.json({err:err})
-        }else{
-            res.json({user:user});
-        }
-    });
-
-});
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-app.use(require('connect-flash')());
-app.use(function (req, res, next) {
-    res.locals.messages = require('express-messages')(req, res);
-    next();
-});
-
-app.use(function(err, req,res, next){ //errrenderfucntion
-
-  if(err){
 
     res.locals.message = err.message;
-
-
-
     console.log(err);
 
-    res.json( {err:err, common:"common"});
+            res.json({err: err});
+        }
 
-  }
-
-})
-
+    })
 // console.log(process)
 // process.exit();
-
-//morgan, bodyparser, creator router, router2 , errfunction, errrenderfunction
+//
+// morgan, bodyparser, creator router, router2 , er
