@@ -352,11 +352,9 @@ var menuSchema = new mongoose.Schema({
     category: String,
     tag:String,
     menuImage: { type:String}
-
     // menu : [],
     // images : []
 });
-
 
 var Menu = mongoose.model("Menu" , menuSchema);
 
@@ -364,7 +362,7 @@ router2.post('/menuupload', function(req, res, next) {
 
     // console.log(req.body);
 
-    upload(req,res,function(err) {
+   upload(req,res,function(err) {
         if(err) {
             return console.log(err)
         }
@@ -385,8 +383,6 @@ router2.post('/menuupload', function(req, res, next) {
     req.checkBody('menuImage', 'Item Image is Required').notEmpty();
 
     var errors = req.validationErrors();
-
-
     res11.save(function(err){
         if(err){
             console.log(err);
@@ -397,11 +393,10 @@ router2.post('/menuupload', function(req, res, next) {
 
 
     });
-    });
 
 });
 
-router2.get('/menulist', function(req, res, next) {
+   router2.get('/menulist', function(req, res, next) {
 
     Menu.find({}, function(err, menulist) {
 
@@ -450,7 +445,7 @@ router2.patch('/menulist/:id', function(req, res, next) {
 
 
 
-// ////////////////////////////////////////////////////////////////////////////////
+
 
     app.use(require('connect-flash')());
     app.use(function (req, res, next) {
