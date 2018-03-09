@@ -351,7 +351,7 @@ var menuSchema = new mongoose.Schema({
     itemprice: {type:Number, default:"100"},
     category: String,
     tag:String,
-
+    menuImage: { type:String}
     // menu : [],
     // images : []
 });
@@ -362,21 +362,27 @@ router2.post('/menuupload', function(req, res, next) {
 
     // console.log(req.body);
 
+   upload(req,res,function(err) {
+        if(err) {
+            return console.log(err)
+        }
+
+
     var res11 = new Menu({
-        itemname: req.body.itemname
-       // itemprice: req.body.itemprice
+        itemname: req.body.itemname,
+        itemprice: req.body.itemprice,
+        category: req.body.category,
+        tag: req.body.tag,
+        menuImage: req.body.menuImage
     })
-
-
-    req.checkBody('firstName','firstname is required').notEmpty();
-    req.checkBody('lastName','lastname is required').notEmpty();
-    req.checkBody('email', 'email is required').notEmpty();
-    req.checkBody('email', 'Invalid email address').isEmail();
-    req.checkBody('password', 'password required').notEmpty();
-    req.checkBody('password', 'password is short - min 6 char required').isLength({min: 6});
+    //validation part
+    req.checkBody('itemname','Item Name is Required').notEmpty();
+    req.checkBody('itemprice','Item Price is Required').notEmpty();
+    req.checkBody('category', 'Item Category is Required').notEmpty();
+    req.checkBody('tag', 'Item Veg or Non Veg tag is Required').notEmpty();
+    req.checkBody('menuImage', 'Item Image is Required').notEmpty();
 
     var errors = req.validationErrors();
-
     res11.save(function(err){
         if(err){
             console.log(err);
@@ -389,8 +395,8 @@ router2.post('/menuupload', function(req, res, next) {
     });
 
 });
-//
-router2.get('/menulist', function(req, res, next) {
+
+   router2.get('/menulist', function(req, res, next) {
 
     Menu.find({}, function(err, menulist) {
 
@@ -408,7 +414,6 @@ router2.delete('/menulist/:id', function(req, res, next) {
 
 
     console.log(req.params);
-    // //
 
     Menu.remove({ _id: req.params.id}, function(err) {
         if (err) {
@@ -443,7 +448,8 @@ router2.patch('/menulist/:id', function(req, res, next) {
 
 
 
-// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
     app.use(require('connect-flash')());
     app.use(function (req, res, next) {
