@@ -364,7 +364,7 @@ router2.post('/menuupload', function(req, res, next) {
 
     var res11 = new Menu({
         itemname: req.body.itemname
-        itemprice: req.body.itemprice
+       // itemprice: req.body.itemprice
     })
 
 
