@@ -31,7 +31,7 @@ var multer = require("multer");
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null,path.join(__dirname, 'uploads'))
+        cb(null,path.join(__dirname, './uploads'))
     },
     filename: function (req, file, cb) {
         cb(null, file.fieldname + '-' + Date.now())
@@ -362,41 +362,43 @@ router2.post('/menuupload', function(req, res, next) {
 
     // console.log(req.body);
 
-   upload(req,res,function(err) {
-        if(err) {
-            return console.log(err)
-        }
+    // upload(req, res, function (err) {
+    //     if (err) {
+    //         return console.log(err)
+    //     }
+        //validation part
+        req.checkBody('itemname', 'Item Name is Required').notEmpty();
+        req.checkBody('itemprice', 'Item Price is Required').notEmpty();
+        req.checkBody('category', 'Item Category is Required').notEmpty();
+        req.checkBody('tag', 'Item Veg or Non Veg tag is Required').notEmpty();
+        req.checkBody('menuImage', 'Item Image is Required').notEmpty();
+
+        var errors = req.validationErrors();
+
+        var res11 = new Menu({
+            itemname: req.body.itemname,
+            itemprice: req.body.itemprice,
+            category: req.body.category,
+            tag: req.body.tag,
+            menuImage: req.body.menuImage
+        })
+
+        res11.save(function (err) {
+            if (err) {
+                console.log(err);
+                res.json({"status": err})
+            } else {
+                res.json({"status": "success"});
+            }
 
 
-    var res11 = new Menu({
-        itemname: req.body.itemname,
-        itemprice: req.body.itemprice,
-        category: req.body.category,
-        tag: req.body.tag,
-        menuImage: req.body.menuImage
-    })
-    //validation part
-    req.checkBody('itemname','Item Name is Required').notEmpty();
-    req.checkBody('itemprice','Item Price is Required').notEmpty();
-    req.checkBody('category', 'Item Category is Required').notEmpty();
-    req.checkBody('tag', 'Item Veg or Non Veg tag is Required').notEmpty();
-    req.checkBody('menuImage', 'Item Image is Required').notEmpty();
+        });
 
-    var errors = req.validationErrors();
-    res11.save(function(err){
-        if(err){
-            console.log(err);
-            res.json({"status":err})
-        }else{
-            res.json({"status":"success"});
-        }
+    // });
+})
 
 
-    });
-
-});
-
-   router2.get('/menulist', function(req, res, next) {
+router2.get('/menulist', function(req, res, next) {
 
     Menu.find({}, function(err, menulist) {
 
@@ -451,24 +453,25 @@ router2.patch('/menulist/:id', function(req, res, next) {
 
 
 
+
+
     app.use(require('connect-flash')());
     app.use(function (req, res, next) {
         res.locals.messages = require('express-messages')(req, res);
         next();
     });
 
-    app.use(function (err, req, res, next) { //errrenderfucntion
+    app.use(function (err, req, res, next) {
 
         if (err) {
 
-    res.locals.message = err.message;
-    console.log(err);
+            res.locals.message = err.message;
+            console.log(err);
 
             res.json({err: err});
         }
-
-    })
-// console.log(process)
+    });
+    // console.log(process)
 // process.exit();
 //
-// morgan, bodyparser, creator router, router2 , er
+// morgan, bodyparser, creator router, route
