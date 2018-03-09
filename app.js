@@ -346,6 +346,105 @@ router2.post('/signup', function(req, res, next) {
 //
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+var menuSchema = new mongoose.Schema({
+    itemname: {type:String, required:true},
+    itemprice: {type:Number, default:"100"},
+    category: String,
+    tag:String,
+
+    // menu : [],
+    // images : []
+});
+
+var Menu = mongoose.model("Menu" , menuSchema);
+
+router2.post('/menuupload', function(req, res, next) {
+
+    // console.log(req.body);
+
+    var res11 = new Menu({
+        itemname: req.body.itemname
+       // itemprice: req.body.itemprice
+    })
+
+
+    req.checkBody('firstName','firstname is required').notEmpty();
+    req.checkBody('lastName','lastname is required').notEmpty();
+    req.checkBody('email', 'email is required').notEmpty();
+    req.checkBody('email', 'Invalid email address').isEmail();
+    req.checkBody('password', 'password required').notEmpty();
+    req.checkBody('password', 'password is short - min 6 char required').isLength({min: 6});
+
+    var errors = req.validationErrors();
+
+    res11.save(function(err){
+        if(err){
+            console.log(err);
+            res.json({"status":err})
+        }else{
+            res.json({"status":"success"});
+        }
+
+
+    });
+
+});
+//
+router2.get('/menulist', function(req, res, next) {
+
+    Menu.find({}, function(err, menulist) {
+
+        if(err){
+            res.json({err:err});
+        }else{
+            res.send(menulist);
+        }
+    });
+
+
+});
+
+router2.delete('/menulist/:id', function(req, res, next) {
+
+
+    console.log(req.params);
+    // //
+
+    Menu.remove({ _id: req.params.id}, function(err) {
+        if (err) {
+            res.json({err:err});
+        }
+        else {
+            res.json({
+                status:"success"
+            })
+        }
+    });
+
+
+});
+router2.patch('/menulist/:id', function(req, res, next) {
+
+
+    console.log(req.params);
+
+    Menu.findByIdAndUpdate(req.params.id, { $set: { name: req.body.name }},{new:true}, function (err, menulist) {
+        if (err){
+            res.json({err:err})
+        }else{
+            res.json({menulist:menulist});
+        }
+    });
+
+});
+
+
+
+
+
+
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     app.use(require('connect-flash')());
     app.use(function (req, res, next) {
         res.locals.messages = require('express-messages')(req, res);
