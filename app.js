@@ -364,8 +364,18 @@ router2.post('/menuupload', function(req, res, next) {
 
     var res11 = new Menu({
         itemname: req.body.itemname
+        itemprice: req.body.itemprice
     })
 
+
+    req.checkBody('firstName','firstname is required').notEmpty();
+    req.checkBody('lastName','lastname is required').notEmpty();
+    req.checkBody('email', 'email is required').notEmpty();
+    req.checkBody('email', 'Invalid email address').isEmail();
+    req.checkBody('password', 'password required').notEmpty();
+    req.checkBody('password', 'password is short - min 6 char required').isLength({min: 6});
+
+    var errors = req.validationErrors();
 
     res11.save(function(err){
         if(err){
@@ -379,7 +389,7 @@ router2.post('/menuupload', function(req, res, next) {
     });
 
 });
-
+//
 router2.get('/menulist', function(req, res, next) {
 
     Menu.find({}, function(err, menulist) {
@@ -398,7 +408,7 @@ router2.delete('/menulist/:id', function(req, res, next) {
 
 
     console.log(req.params);
-    //
+    // //
 
     Menu.remove({ _id: req.params.id}, function(err) {
         if (err) {
