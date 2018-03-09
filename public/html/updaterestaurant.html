@@ -5,7 +5,7 @@
 
     <meta charset="utf-8">
 
-    <title>Signup form</title>
+    <title>updaterestaurant</title>
     <style>
         html{
             background-color: #f3f3f3;
@@ -42,10 +42,6 @@
             border: 1px solid #dbdbdb;
         }
 
-        .form-mini .form-last-row{
-            margin: 35px auto 0;
-        }
-
         .form-mini button{
             display: block;
             border-radius: 2px;
@@ -58,19 +54,6 @@
             border: 0;
             cursor: pointer;
         }
-
-        .form-mini ::-webkit-input-placeholder {
-            color:  #999;
-        }
-
-        .form-mini ::-moz-placeholder {
-            color:  #999;
-            opacity: 1;
-        }
-
-        .form-mini :-ms-input-placeholder {
-            color:  #999;
-        }
     </style>
 </head>
 <body>
@@ -79,27 +62,25 @@
     <div class="form-mini-container">
 
 
-        <h1>signup</h1>
+        <h1>Update Restaurant Form</h1>
 
         <form class="form-mini" method="post" action="#">
 
             <div class="form-row">
-                <input type="text" name="firstname" placeholder="First Name" id="id1">
+                <input type="text" name="name" placeholder="Restaurant Name" id="id1">
             </div>
             <div class="form-row">
-                <input type="text" name="lastname" placeholder="Last Name" id="id2">
+                <input type="text" name="Address" placeholder="Address" id="id2">
+                <input type="text" name="Street Address" placeholder="Street Address" id="id3">
+                <input type="text" name="Landmark" placeholder="Landmark" id="4">
+                <input type="text" name="City" placeholder="City" id="id5">
+                <input type="text" name="State" placeholder="State" id="id6">
+                <input type="text" name="Zipcode" placeholder="Zipcode" id="id7">
             </div>
 
             <div class="form-row">
-                <input type="email" name="email" placeholder="Your Email" id="id3">
+                <input type="email" name="Phonenumber" placeholder="Phone number" id="id8">
             </div>
-            <div class="form-row">
-                <input type="password" name="password" placeholder="Your Password" id="id4">
-            </div>
-            <div class="form-row">
-                <input type="password" name="confirmpassword" placeholder="Confirm Your Password" id="id5">
-            </div>
-
 
             <div class="form-row form-last-row">
                 <button type="submit">Submit Form</button>
@@ -107,31 +88,18 @@
 
         </form>
     </div>
-
-
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
     $(document).ready(function(){
-        $("button").click(function(e){
-            e.preventDefault();
-            $.ajax({
-                "method":"POST",
-                url: "/signup",
-                data: {
-                    firstname: $('#id1').val(),
-                    lastname: $('#id2').val(),
-                   email:$('#id3').val(),
-                  password:$('#id4').val(),
-                   confirmpassword:$('#id5').val(),
+        $.ajax({
+            "method":"get",
+            url: "/restaurants/5aa13bf861cd793ef6947fbd",
+            success: function(result){
+                console.log(result)
+            }});
 
-                },
-
-                success: function(result){
-                    console.log(result)
-                }});
-        });
     });
 </script>
 

@@ -130,6 +130,25 @@
 
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("button").click(function(e){
+            e.preventDefault();
+            $.ajax({
+                "method":"POST",
+                url: "/signup",
+                data: {
+                    email: $('#id1').val(),
+                    password: $('#id2').val()
+                },
+
+                success: function(result){
+                    console.log(result)
+                }});
+        });
+    });
+</script>
 </body>
 
 </html>

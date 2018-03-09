@@ -121,12 +121,12 @@ router2.post('/restaurants', function(req, res, next) {
       state:req.body.state,
       landmark:req.body.landmark,
       city:req.body.city,
-      zipcode:req.body.zipcode,
+      zipCode:req.body.zipcode,
       phonenumber:req.body.phonenumber
   })
 
 
-  res1.save(function(err,data){
+   res1.save(function(err,data){
     if(err){
       console.log(err);
       res.json({"status":err})
@@ -206,12 +206,11 @@ router2.get('/download/:file', function(req,res,next){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var userSchema = mongoose.Schema({
-    firstName: { type:String,required:true},
-    lastName: { type:String,required:true},
-    yourEmail: { type:String,required:true},
-    yourPassword: { type:String,required:true}
-
-
+    firstname: { type:String,required:true},
+    lastname: { type:String,required:true},
+    email: { type:String,required:true},
+    password: { type:String,required:true},
+    confirmpassword: {type:String,required:true}
 });
 
 var User = mongoose.model('User', userSchema);
@@ -224,7 +223,11 @@ router2.post('/signup', function(req, res, next) {
     // req.checkBody('password','password is invalid').isLength({min:6}).equals(req.body.confirmpassword);
 
 
-    var user = new User({ firstName:req.body.firstname ,lastName:req.body.lastname,yourEmail:req.body.email,yourPassword:req.body.password});
+    var user = new User({ firstname:req.body.firstname ,
+        lastname:req.body.lastname,
+        email:req.body.email,
+        password:req.body.password,
+        confirmpassword:req.body.confirmpassword});
     user.save(function(err){
         if(err){
             console.log(err);
@@ -309,14 +312,23 @@ app.use(function(err, req,res, next){ //errrenderfucntion
     res.json({err:err, common:"common"});
   }
 
-})
+});
 
-// console.log(process)
-// process.exit();
+//////////////////////////////login/////////////////////////////////////////////////////////////
 
-//morgan, bodyparser, creator router, router2 , errfunction, errrenderfunction
+router2.post('/login', function(req, res, next) {
+    var user = new User({ email:req.body.email,
+        password:req.body.password});
+    user.save(function(err){
+        if(err){
+            console.log(err);
+            res.json({"status":err})
+        }else{
+            res.json({"status":"success"});
+        }
+    });
 
-
+});
 
 
 
