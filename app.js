@@ -126,7 +126,7 @@ router2.post('/restaurants', function(req, res, next) {
         zipcode:req.body.zipcode,
         phonenumber:req.body.phonenumber
 
-    })
+    });
 
     ////
     //const { checkSchema } = require('express-validator/check');
@@ -135,7 +135,7 @@ router2.post('/restaurants', function(req, res, next) {
 //req.checkBody{restaurantsName
     req.checkBody('firstname','firstname is required').notEmpty;
 
-}
+
 
 res1.save(function(err,data){
 
@@ -143,7 +143,7 @@ res1.save(function(err,data){
         console.log(err);
         res.json({"status":err})
     }else{
-        console.log(data)
+        console.log(data);
         res.json({"status":"success"});
     }
 });

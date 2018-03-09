@@ -5,7 +5,7 @@
 
     <meta charset="utf-8">
 
-    <title>Signup form</title>
+    <title>restaurant form</title>
     <style>
         html{
             background-color: #f3f3f3;
@@ -100,6 +100,7 @@
 <script>
     $(document).ready(function(){
         $("button").click(function(e){
+            // stop the form from submitting the normal way and refreshing the page
             e.preventDefault();
             $.ajax({
                 "method":"POST",

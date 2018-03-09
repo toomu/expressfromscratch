@@ -59,6 +59,16 @@
 <body>
 <div class="main-content">
 
+
+    <form>
+        <div class="form-row">
+            <input type="text" name="name" id="_id">
+        </div>
+        <div class="form-row form-last-row">
+            <button type="submit" id="id_submit_button">Submit Form</button>
+        </div>
+    </form>
+
     <div class="form-mini-container">
 
 
@@ -93,16 +103,30 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
     $(document).ready(function(){
-        $.ajax({
-            "method":"get",
-            url: "/restaurants/5aa13bf861cd793ef6947fbd",
-            success: function(result){
-                console.log(result)
-            }});
+
+        $("#id_submit_button").click(function(e){
+            // stop the form from submitting the normal way and refreshing the page
+            e.preventDefault();
+
+           var id = $("#_id").val();
+            $.ajax({
+                "method":"get",
+                url: "/restaurants/" + id,
+                success: function(result){
+                    $("#id1").val(result.name);
+                    $("#id2").val(result.address);
+                    $("#id4").val(result.landmark);
+                    $("#id5").val(result.city);
+                    $("#id6").val(result.state);
+                    $("#id7").val(result.zipcode);
+                    $("#id8").val(result.phonenumber);
+
+                    console.log(result)
+
+                }});
+        });
 
     });
 </script>
-
 </body>
-
 </html>
