@@ -4,6 +4,21 @@ var path = require('path');
 var expressValidator = require("express-validator");
 // var flash = require('connect-flash');
 
+var jwt = require('jsonwebtoken');
+var nodemailer = require('nodemailer');
+var sgTransport = require('nodemailer-sendgrid-transport');
+
+
+var smtpTransport = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+        user: "",
+        pass: ""
+    }
+});
+
+
+////////////////////////////////////////
 var mongoose = require("mongoose");
 
 var app = express();
@@ -222,23 +237,36 @@ router2.get('/download/:file', function(req,res,next){
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+var options = {
+    auth: {
+        api_user: 'swiggyclone',
+        api_key: 'svVFa_f7SxuQ5C85mybdNg'
+    }
+}
+
+var client = nodemailer.createTransport(sgTransport(options));
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
 var userSchema = mongoose.Schema({
     firstName: { type:String,required:true},
     lastName: { type:String,required:true},
     yourEmail: { type:String,required:true},
     yourPassword: { type:String,required:true},
-    profileImage: { type:String}
-
-
+    profileImage: { type:String},
+    active: {type:Boolean, required:true, default:false},
+    temporaryToken: {type:String,required:true}
 });
 
 var User = mongoose.model('User', userSchema);
 
 router2.post('/signup', function(req, res, next) {
 
-
-
     // console.log(req.body)
+
     upload(req,res,function(err) {
         if(err) {
             return console.log(err)
@@ -253,7 +281,6 @@ router2.post('/signup', function(req, res, next) {
 
         var errors = req.validationErrors();
 
-
         // console.log(errors);
         if (errors) {
             res.json({"status": errors})
@@ -265,7 +292,9 @@ router2.post('/signup', function(req, res, next) {
                 lastName: req.body.lastName,
                 yourEmail: req.body.email,
                 yourPassword: req.body.password,
-                profileImage: req.body.myFail
+                profileImage: req.body.myFail,
+                temporaryToken: jwt.sign({email:yourEmail },secret, { expiresIn: '24h'})
+
             });
 
             user.save(function (err) {
@@ -273,7 +302,26 @@ router2.post('/signup', function(req, res, next) {
                     console.log(err);
                     res.json({"status": err})
                 } else {
-                    res.json({"status": "success"})
+
+                    var email = {
+                        from: 'Localhost staff, staff@localhost.com',
+                        to: 'mr.walrus@foo.com',
+                        subject: 'Localhost Activation Link',
+                        text: 'Hello' + req.body.firstName + 'Thank You for resigstering at localhost.Please click on link below to complete your activation',
+                        html: 'Hello <strong> ' + req.body.firstName + '</strong>' +'<br><br>Thank You for resigstering at localhost.'+
+                        'Please click on link below to complete your activation:<br><br><a href="http://localhost:3000/activate/">http://localhost:3000/activate</a>'
+                    };
+
+                    client.sendMail(email, function(err, info){
+                        if (err ){
+                            console.log(err);
+                        }
+                        else {
+                            console.log('Message sent: ' + info.response);
+                        }
+                    });
+
+                    res.json({"status": "Account Registered! please check your activation link."})
                 }
             });
         }
@@ -281,6 +329,27 @@ router2.post('/signup', function(req, res, next) {
 
 });
 
+var rand,mailOptions,host,link;
+app.get('/send',function(req,res){
+    rand=Math.floor((Math.random() * 100) + 54);
+    host=req.get('host');
+    link="http://"+req.get('host')+"/verify?id="+rand;
+    mailOptions={
+        to : req.query.to,
+        subject : "Please confirm your Email account",
+        html : "Hello,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"
+    }
+    console.log(mailOptions);
+    smtpTransport.sendMail(mailOptions, function(error, response){
+        if(error){
+            console.log(error);
+            res.end("error");
+        }else{
+            console.log("Message sent: " + response.message);
+            res.end("sent");
+        }
+    });
+});
 
 
     router2.get('/users', function (req, res, next) {
@@ -343,6 +412,20 @@ router2.post('/signup', function(req, res, next) {
         });
 
     });
+
+    //////////////////////////
+router2.post('/login', function (req, res, next) {
+
+    User.find({yourEmail:req.body.yourEmail, yourPassword:req.body.yourPassword}, function (err, user) {
+        console.log(user);
+        if (!(user.length == 1)) {
+            res.json({err: "no user"});
+        } else {
+            res.send("login sucsessfull");
+        }
+    });
+});
+
 //
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
