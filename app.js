@@ -240,10 +240,16 @@ router2.get('/download/:file', function(req,res,next){
 
 var options = {
     auth: {
-        api_user: 'swiggyclone',
-        api_key: 'svVFa_f7SxuQ5C85mybdNg'
+        api_user: 'AnanthaVarma',
+        api_key:"test@1234"
+        //api_key: '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'
     }
 }
+
+
+
+
+// console.log(sgTransport(options))
 
 var client = nodemailer.createTransport(sgTransport(options));
 
@@ -257,7 +263,7 @@ var userSchema = mongoose.Schema({
     yourEmail: { type:String,required:true},
     yourPassword: { type:String,required:true},
     profileImage: { type:String},
-    active: {type:Boolean, required:true, default:false},
+    // active: {type:Boolean, required:true, default:false},
     temporaryToken: {type:String,required:true}
 });
 
@@ -293,7 +299,7 @@ router2.post('/signup', function(req, res, next) {
                 yourEmail: req.body.email,
                 yourPassword: req.body.password,
                 profileImage: req.body.myFail,
-                temporaryToken: jwt.sign({email:yourEmail },secret, { expiresIn: '24h'})
+                temporaryToken: jwt.sign({email:req.body.email }, "rwwrbwr",{ expiresIn: '24h'})
 
             });
 
@@ -304,8 +310,8 @@ router2.post('/signup', function(req, res, next) {
                 } else {
 
                     var email = {
-                        from: 'Localhost staff, staff@localhost.com',
-                        to: 'mr.walrus@foo.com',
+                        from: req.body.email,
+                        to: req.body.email,
                         subject: 'Localhost Activation Link',
                         text: 'Hello' + req.body.firstName + 'Thank You for resigstering at localhost.Please click on link below to complete your activation',
                         html: 'Hello <strong> ' + req.body.firstName + '</strong>' +'<br><br>Thank You for resigstering at localhost.'+
@@ -317,7 +323,7 @@ router2.post('/signup', function(req, res, next) {
                             console.log(err);
                         }
                         else {
-                            console.log('Message sent: ' + info.response);
+                            console.log(arguments);
                         }
                     });
 
