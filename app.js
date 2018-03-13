@@ -240,9 +240,10 @@ router2.get('/download/:file', function(req,res,next){
 
 var options = {
     auth: {
-        api_user: 'AnanthaVarma',
-        api_key:"test@1234"
-        //api_key: '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'
+        // api_user: 'AnanthaVarma',
+        // api_key:"test@1234"
+        // api_user:"KGOCLQjDSDWKEtYzT7rEKA",
+        api_key: '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'
     }
 }
 
@@ -269,7 +270,7 @@ var userSchema = mongoose.Schema({
 
 var User = mongoose.model('User', userSchema);
 
-router2.post('/signup', function(req, res, next) {
+    router2.post('/signup', function(req, res, next) {
 
     // console.log(req.body)
 
@@ -336,7 +337,7 @@ router2.post('/signup', function(req, res, next) {
 });
 
 var rand,mailOptions,host,link;
-app.get('/send',function(req,res){
+    app.get('/send',function(req,res){
     rand=Math.floor((Math.random() * 100) + 54);
     host=req.get('host');
     link="http://"+req.get('host')+"/verify?id="+rand;
