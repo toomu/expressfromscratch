@@ -9,15 +9,6 @@ var nodemailer = require('nodemailer');
 var sgTransport = require('nodemailer-sendgrid-transport');
 
 
-var smtpTransport = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-        user: "",
-        pass: ""
-    }
-});
-
-
 ////////////////////////////////////////
 var mongoose = require("mongoose");
 
@@ -237,7 +228,6 @@ router2.get('/download/:file', function(req,res,next){
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 var options = {
     auth: {
         // api_user: 'AnanthaVarma',
@@ -247,14 +237,9 @@ var options = {
     }
 }
 
-
-
-
 // console.log(sgTransport(options))
 
 var client = nodemailer.createTransport(sgTransport(options));
-
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -335,29 +320,6 @@ var User = mongoose.model('User', userSchema);
     });
 
 });
-
-var rand,mailOptions,host,link;
-    app.get('/send',function(req,res){
-    rand=Math.floor((Math.random() * 100) + 54);
-    host=req.get('host');
-    link="http://"+req.get('host')+"/verify?id="+rand;
-    mailOptions={
-        to : req.query.to,
-        subject : "Please confirm your Email account",
-        html : "Hello,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"
-    }
-    console.log(mailOptions);
-    smtpTransport.sendMail(mailOptions, function(error, response){
-        if(error){
-            console.log(error);
-            res.end("error");
-        }else{
-            console.log("Message sent: " + response.message);
-            res.end("sent");
-        }
-    });
-});
-
 
     router2.get('/users', function (req, res, next) {
 
