@@ -360,7 +360,7 @@ var Menu = mongoose.model("Menu" , menuSchema);
 
 router2.post('/menuupload', function(req, res, next) {
 
-    console.log(req.body);
+    // console.log(req);
 
     // upload(req, res, function (err) {
     //     if (err) {
@@ -376,7 +376,7 @@ router2.post('/menuupload', function(req, res, next) {
                 itemprice: req.body.itemprice,
                 category: req.body.category,
                 tag: req.body.tag,
-                menuImage: req.body.menuImage
+                menuImage: req.body.myFile
             })
 
             res11.save(function (err) {
@@ -396,10 +396,6 @@ router2.post('/menuupload', function(req, res, next) {
 
             //
     });
-
-
-
-
 
         //validation part
         req.checkBody('itemname', 'Item Name is Required').notEmpty();
