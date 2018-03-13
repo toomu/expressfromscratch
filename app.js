@@ -131,7 +131,6 @@ var restaurantSchema = new mongoose.Schema({
   // images : []
 });
 
-
 var Restaurant = mongoose.model("Restaurant" , restaurantSchema);
 
 router2.post('/restaurants', function(req, res, next) {
@@ -159,8 +158,6 @@ router2.post('/restaurants', function(req, res, next) {
     }
   });
 });
-
-
 
 router2.get('/restaurants', function(req, res, next) {
 
@@ -249,11 +246,13 @@ var userSchema = mongoose.Schema({
     yourEmail: { type:String,required:true},
     yourPassword: { type:String,required:true},
     profileImage: { type:String},
-    // active: {type:Boolean, required:true, default:false},
+    active: {type:Boolean, required:true, default:false},
     temporaryToken: {type:String,required:true}
 });
 
 var User = mongoose.model('User', userSchema);
+
+
 
     router2.post('/signup', function(req, res, next) {
 
@@ -278,6 +277,7 @@ var User = mongoose.model('User', userSchema);
             res.json({"status": errors})
         } else {
 
+            var token = jwt.sign({email:req.body.email }, "rwwrbwr",{ expiresIn: '24h'})
 
             var user = new User({
                 firstName: req.body.firstName,
@@ -285,7 +285,7 @@ var User = mongoose.model('User', userSchema);
                 yourEmail: req.body.email,
                 yourPassword: req.body.password,
                 profileImage: req.body.myFail,
-                temporaryToken: jwt.sign({email:req.body.email }, "rwwrbwr",{ expiresIn: '24h'})
+                temporaryToken: token
 
             });
 
@@ -301,7 +301,9 @@ var User = mongoose.model('User', userSchema);
                         subject: 'Localhost Activation Link',
                         text: 'Hello' + req.body.firstName + 'Thank You for resigstering at localhost.Please click on link below to complete your activation',
                         html: 'Hello <strong> ' + req.body.firstName + '</strong>' +'<br><br>Thank You for resigstering at localhost.'+
-                        'Please click on link below to complete your activation:<br><br><a href="http://localhost:3000/activate/">http://localhost:3000/activate</a>'
+                        'Please click on link below to complete your activation:<br><br><a' +
+                        ' href="http://localhost:3000/activate/"'+
+                        token+'>Activate</a>'
                     };
 
                     client.sendMail(email, function(err, info){
