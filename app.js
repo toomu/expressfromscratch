@@ -31,14 +31,14 @@ var multer = require("multer");
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null,path.join(__dirname, './uploads'))
+        cb(null,path.join(__dirname, './public/uploads'))
     },
     filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now())
+        cb(null, '' + Date.now())
         // console.log(req);
         // cb(null, req.body.email + '-' + Date.now())
     }
-})
+});
 
 var upload = multer({ storage: storage }).single("myFile");
 
@@ -360,12 +360,43 @@ var Menu = mongoose.model("Menu" , menuSchema);
 
 router2.post('/menuupload', function(req, res, next) {
 
-    // console.log(req.body);
+    // console.log(req);
 
     // upload(req, res, function (err) {
     //     if (err) {
     //         return console.log(err)
     //     }
+        upload(req,res,function(err){
+        if (err) {
+            return res.end("Error uploading file.");
+        }
+
+            var res11 = new Menu({
+                itemname: req.body.itemname,
+                itemprice: req.body.itemprice,
+                category: req.body.category,
+                tag: req.body.tag,
+                menuImage: req.body.myFile
+            })
+
+            res11.save(function (err) {
+                if (err) {
+                    console.log(err);
+                    res.json({"status": err})
+                } else {
+                    res.json({"status": "success"});
+                    res.end("File is uploaded");
+
+                }
+
+
+            });
+
+
+
+            //
+    });
+
         //validation part
         req.checkBody('itemname', 'Item Name is Required').notEmpty();
         req.checkBody('itemprice', 'Item Price is Required').notEmpty();
@@ -375,24 +406,6 @@ router2.post('/menuupload', function(req, res, next) {
 
         var errors = req.validationErrors();
 
-        var res11 = new Menu({
-            itemname: req.body.itemname,
-            itemprice: req.body.itemprice,
-            category: req.body.category,
-            tag: req.body.tag,
-            menuImage: req.body.menuImage
-        })
-
-        res11.save(function (err) {
-            if (err) {
-                console.log(err);
-                res.json({"status": err})
-            } else {
-                res.json({"status": "success"});
-            }
-
-
-        });
 
     // });
 })
