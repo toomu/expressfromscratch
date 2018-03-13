@@ -321,6 +321,11 @@ var User = mongoose.model('User', userSchema);
 
 });
 
+    router2.get('/activate', function (req, res, next) {
+
+    res.send("activation is completed, you can logIn")
+});
+
     router2.get('/users', function (req, res, next) {
 
         User.find({}, function (err, user) {
