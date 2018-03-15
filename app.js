@@ -32,8 +32,15 @@ app.use(session({
 
 app.use(expressValidator());
 
-var multer = require("multer");
+/////////////////////////////////////////////////////////
+var dotenv = require("dotenv");
 
+dotenv.load({ path: 'sendgrid.env' });
+
+console.log(process.env.SENDGRID_API_KEY)
+/////////////////////////////////////////////////////////
+
+var multer = require("multer");
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -227,14 +234,12 @@ router2.get('/download/:file', function(req,res,next){
 
 var options = {
     auth: {
-        // api_user: 'AnanthaVarma',
-        // api_key:"test@1234"
-        // api_user:"KGOCLQjDSDWKEtYzT7rEKA",
-        api_key: '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'
+
+        api_key: process.env.SENDGRID_API_KEY
     }
 }
 
-// console.log(sgTransport(options))
+
 
 var client = nodemailer.createTransport(sgTransport(options));
 
@@ -323,9 +328,14 @@ var User = mongoose.model('User', userSchema);
 
 });
 
-    router2.get('/activate', function (req, res, next) {
+    router2.get('/activate/:token', function (req, res, next) {
 
-    res.send("activation is completed, you can logIn")
+        User.update({temporaryToken: req.params.token}, {
+            info: "some new info",
+            password: newPassword
+        }, function(err, affected, resp) {
+            console.log(resp);
+        })
 });
 
     router2.get('/users', function (req, res, next) {
@@ -516,16 +526,6 @@ router2.patch('/menulist/:id', function(req, res, next) {
     });
 
 });
-
-
-
-
-
-
-
-
-
-
 
     app.use(require('connect-flash')());
     app.use(function (req, res, next) {
