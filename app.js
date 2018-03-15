@@ -32,8 +32,15 @@ app.use(session({
 
 app.use(expressValidator());
 
-var multer = require("multer");
+/////////////////////////////////////////////////////////
+var dotenv = require("dotenv");
 
+dotenv.load({ path: 'keys.env' });
+
+console.log(process.env.SENDGRID_API_KEY)
+/////////////////////////////////////////////////////////
+
+var multer = require("multer");
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -59,7 +66,7 @@ var cookieParser = require('cookie-parser')
 app.use(cookieParser())
 
 app.use(function(req, res, next) {
-  console.log('Cookies: ', req.cookies);
+  // console.log('Cookies: ', req.cookies);
   next();
 });
 
@@ -107,14 +114,7 @@ app.use(router2)
 
 app.use(expressValidator());
 
-app.use(function(req,res,next){ //errfunction
 
-
-    var err = new Error("Not found");
-    err.status =404;
-    next(err);
-
-});
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -227,14 +227,12 @@ router2.get('/download/:file', function(req,res,next){
 
 var options = {
     auth: {
-        // api_user: 'AnanthaVarma',
-        // api_key:"test@1234"
-        // api_user:"KGOCLQjDSDWKEtYzT7rEKA",
-        api_key: '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'
+
+        api_key: process.env.SENDGRID_API_KEY
     }
 }
 
-// console.log(sgTransport(options))
+
 
 var client = nodemailer.createTransport(sgTransport(options));
 
@@ -296,15 +294,16 @@ var User = mongoose.model('User', userSchema);
                 } else {
 
                     var email = {
-                        from: req.body.email,
+                        from: "admin@swiggyclone.com",
                         to: req.body.email,
                         subject: 'Localhost Activation Link',
                         text: 'Hello' + req.body.firstName + 'Thank You for resigstering at localhost.Please click on link below to complete your activation',
                         html: 'Hello <strong> ' + req.body.firstName + '</strong>' +'<br><br>Thank You for resigstering at localhost.'+
                         'Please click on link below to complete your activation:<br><br><a' +
-                        ' href="http://localhost:3000/activate/"'+
-                        token+'>Activate</a>'
+                        ' href="http://localhost:3000/activate/'+ token+'">Activate</a>'
                     };
+
+                    // console.log(email);
 
                     client.sendMail(email, function(err, info){
                         if (err ){
@@ -323,9 +322,21 @@ var User = mongoose.model('User', userSchema);
 
 });
 
-    router2.get('/activate', function (req, res, next) {
+    router2.get('/activate/:token', function (req, res, next) {
 
-    res.send("activation is completed, you can logIn")
+        // console.log(req.params.token)
+
+        if(req.params.token) {
+
+
+            User.update({temporaryToken: req.params.token}, {
+                active: true
+            }, function (err, affected, resp) {
+                res.json({sucess:"activation done"})
+            })
+        }else{
+            res.json({status:"no url found"})
+        }
 });
 
     router2.get('/users', function (req, res, next) {
@@ -517,21 +528,24 @@ router2.patch('/menulist/:id', function(req, res, next) {
 
 });
 
-
-
-
-
-
-
-
-
-
-
     app.use(require('connect-flash')());
     app.use(function (req, res, next) {
         res.locals.messages = require('express-messages')(req, res);
         next();
     });
+
+
+
+
+app.use(function(req,res,next){ //errfunction
+
+
+    var err = new Error("Not found");
+    err.status =404;
+    next(err);
+
+});
+
 
     app.use(function (err, req, res, next) {
 
