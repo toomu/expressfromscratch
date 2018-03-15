@@ -1,4 +1,4 @@
 node_modules/
 .idea/
 uploads/
-sendgrid.env
+keys.env

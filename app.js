@@ -35,7 +35,7 @@ app.use(expressValidator());
 /////////////////////////////////////////////////////////
 var dotenv = require("dotenv");
 
-dotenv.load({ path: 'sendgrid.env' });
+dotenv.load({ path: 'keys.env' });
 
 console.log(process.env.SENDGRID_API_KEY)
 /////////////////////////////////////////////////////////
