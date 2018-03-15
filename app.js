@@ -66,7 +66,7 @@ var cookieParser = require('cookie-parser')
 app.use(cookieParser())
 
 app.use(function(req, res, next) {
-  console.log('Cookies: ', req.cookies);
+  // console.log('Cookies: ', req.cookies);
   next();
 });
 
@@ -114,14 +114,7 @@ app.use(router2)
 
 app.use(expressValidator());
 
-app.use(function(req,res,next){ //errfunction
 
-
-    var err = new Error("Not found");
-    err.status =404;
-    next(err);
-
-});
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -301,15 +294,16 @@ var User = mongoose.model('User', userSchema);
                 } else {
 
                     var email = {
-                        from: req.body.email,
+                        from: "admin@swiggyclone.com",
                         to: req.body.email,
                         subject: 'Localhost Activation Link',
                         text: 'Hello' + req.body.firstName + 'Thank You for resigstering at localhost.Please click on link below to complete your activation',
                         html: 'Hello <strong> ' + req.body.firstName + '</strong>' +'<br><br>Thank You for resigstering at localhost.'+
                         'Please click on link below to complete your activation:<br><br><a' +
-                        ' href="http://localhost:3000/activate/"'+
-                        token+'>Activate</a>'
+                        ' href="http://localhost:3000/activate/'+ token+'">Activate</a>'
                     };
+
+                    // console.log(email);
 
                     client.sendMail(email, function(err, info){
                         if (err ){
@@ -330,12 +324,19 @@ var User = mongoose.model('User', userSchema);
 
     router2.get('/activate/:token', function (req, res, next) {
 
-        User.update({temporaryToken: req.params.token}, {
-            info: "some new info",
-            password: newPassword
-        }, function(err, affected, resp) {
-            console.log(resp);
-        })
+        // console.log(req.params.token)
+
+        if(req.params.token) {
+
+
+            User.update({temporaryToken: req.params.token}, {
+                active: true
+            }, function (err, affected, resp) {
+                res.json({sucess:"activation done"})
+            })
+        }else{
+            res.json({status:"no url found"})
+        }
 });
 
     router2.get('/users', function (req, res, next) {
@@ -532,6 +533,19 @@ router2.patch('/menulist/:id', function(req, res, next) {
         res.locals.messages = require('express-messages')(req, res);
         next();
     });
+
+
+
+
+app.use(function(req,res,next){ //errfunction
+
+
+    var err = new Error("Not found");
+    err.status =404;
+    next(err);
+
+});
+
 
     app.use(function (err, req, res, next) {
 
